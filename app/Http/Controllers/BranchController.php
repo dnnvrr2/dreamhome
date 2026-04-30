@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BranchController extends Controller
 {
     public function index()
     {
-        $branches = Branch::all();
+        $branches = DB::select("SELECT * FROM branches ORDER BY branch_no");
         return view('branches.index', compact('branches'));
     }
 
@@ -27,16 +27,36 @@ class BranchController extends Controller
             'postcode'  => 'required|max:10',
         ]);
 
-        Branch::create($request->all());
-        return redirect()->route('branches.index')->with('success', 'Branch added successfully.');
+        DB::insert("
+            INSERT INTO branches 
+                (branch_no, street, area, city, postcode, tel_no, fax_no, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+        ", [
+            $request->branch_no,
+            $request->street,
+            $request->area,
+            $request->city,
+            $request->postcode,
+            $request->tel_no,
+            $request->fax_no,
+        ]);
+
+        return redirect()->route('branches.index')
+            ->with('success', 'Branch added successfully.');
     }
 
-    public function edit(Branch $branch)
+    public function edit($branch_no)
     {
+        $branch = DB::select("
+            SELECT * FROM branches WHERE branch_no = ?
+        ", [$branch_no]);
+
+        $branch = $branch[0] ?? abort(404);
+
         return view('branches.edit', compact('branch'));
     }
 
-    public function update(Request $request, Branch $branch)
+    public function update(Request $request, $branch_no)
     {
         $request->validate([
             'street'   => 'required|max:60',
@@ -44,13 +64,35 @@ class BranchController extends Controller
             'postcode' => 'required|max:10',
         ]);
 
-        $branch->update($request->all());
-        return redirect()->route('branches.index')->with('success', 'Branch updated successfully.');
+        DB::update("
+            UPDATE branches
+            SET street     = ?,
+                area       = ?,
+                city       = ?,
+                postcode   = ?,
+                tel_no     = ?,
+                fax_no     = ?,
+                updated_at = NOW()
+            WHERE branch_no = ?
+        ", [
+            $request->street,
+            $request->area,
+            $request->city,
+            $request->postcode,
+            $request->tel_no,
+            $request->fax_no,
+            $branch_no,
+        ]);
+
+        return redirect()->route('branches.index')
+            ->with('success', 'Branch updated successfully.');
     }
 
-    public function destroy(Branch $branch)
+    public function destroy($branch_no)
     {
-        $branch->delete();
-        return redirect()->route('branches.index')->with('success', 'Branch deleted successfully.');
+        DB::delete("DELETE FROM branches WHERE branch_no = ?", [$branch_no]);
+
+        return redirect()->route('branches.index')
+            ->with('success', 'Branch deleted successfully.');
     }
 }

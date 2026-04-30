@@ -11,9 +11,11 @@
         <tr>
             <th>Branch No</th>
             <th>Street</th>
+            <th>Area</th>
             <th>City</th>
             <th>Postcode</th>
             <th>Tel No</th>
+            <th>Fax No</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -22,19 +24,24 @@
         <tr>
             <td>{{ $branch->branch_no }}</td>
             <td>{{ $branch->street }}</td>
+            <td>{{ $branch->area ?? 'N/A' }}</td>
             <td>{{ $branch->city }}</td>
             <td>{{ $branch->postcode }}</td>
-            <td>{{ $branch->tel_no }}</td>
+            <td>{{ $branch->tel_no ?? 'N/A' }}</td>
+            <td>{{ $branch->fax_no ?? 'N/A' }}</td>
             <td>
-                <a href="{{ route('branches.edit', $branch->branch_no) }}" class="btn btn-sm btn-warning">Edit</a>
-                <form action="{{ route('branches.destroy', $branch->branch_no) }}" method="POST" class="d-inline">
+                <a href="{{ route('branches.edit', $branch->branch_no) }}" 
+                   class="btn btn-sm btn-warning">Edit</a>
+                <form action="{{ route('branches.destroy', $branch->branch_no) }}" 
+                      method="POST" class="d-inline">
                     @csrf @method('DELETE')
-                    <button onclick="return confirm('Delete this branch?')" class="btn btn-sm btn-danger">Delete</button>
+                    <button onclick="return confirm('Delete this branch?')" 
+                            class="btn btn-sm btn-danger">Delete</button>
                 </form>
             </td>
         </tr>
         @empty
-        <tr><td colspan="6" class="text-center">No branches found.</td></tr>
+        <tr><td colspan="8" class="text-center">No branches found.</td></tr>
         @endforelse
     </tbody>
 </table>

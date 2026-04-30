@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Owner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OwnerController extends Controller
 {
     public function index()
     {
-        $owners = Owner::all();
+        $owners = DB::select("SELECT * FROM owners ORDER BY owner_no");
         return view('owners.index', compact('owners'));
     }
 
@@ -26,29 +26,71 @@ class OwnerController extends Controller
             'l_name'   => 'required|max:30',
         ]);
 
-        Owner::create($request->all());
-        return redirect()->route('owners.index')->with('success', 'Owner added successfully.');
+        DB::insert("
+            INSERT INTO owners
+                (owner_no, f_name, l_name, street, city, postcode, tel_no, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+        ", [
+            $request->owner_no,
+            $request->f_name,
+            $request->l_name,
+            $request->street,
+            $request->city,
+            $request->postcode,
+            $request->tel_no,
+        ]);
+
+        return redirect()->route('owners.index')
+            ->with('success', 'Owner added successfully.');
     }
 
-    public function edit(Owner $owner)
+    public function edit($owner_no)
     {
+        $owner = DB::select("
+            SELECT * FROM owners WHERE owner_no = ?
+        ", [$owner_no]);
+
+        $owner = $owner[0] ?? abort(404);
+
         return view('owners.edit', compact('owner'));
     }
 
-    public function update(Request $request, Owner $owner)
+    public function update(Request $request, $owner_no)
     {
         $request->validate([
             'f_name' => 'required|max:30',
             'l_name' => 'required|max:30',
         ]);
 
-        $owner->update($request->all());
-        return redirect()->route('owners.index')->with('success', 'Owner updated successfully.');
+        DB::update("
+            UPDATE owners
+            SET f_name     = ?,
+                l_name     = ?,
+                street     = ?,
+                city       = ?,
+                postcode   = ?,
+                tel_no     = ?,
+                updated_at = NOW()
+            WHERE owner_no = ?
+        ", [
+            $request->f_name,
+            $request->l_name,
+            $request->street,
+            $request->city,
+            $request->postcode,
+            $request->tel_no,
+            $owner_no,
+        ]);
+
+        return redirect()->route('owners.index')
+            ->with('success', 'Owner updated successfully.');
     }
 
-    public function destroy(Owner $owner)
+    public function destroy($owner_no)
     {
-        $owner->delete();
-        return redirect()->route('owners.index')->with('success', 'Owner deleted successfully.');
+        DB::delete("DELETE FROM owners WHERE owner_no = ?", [$owner_no]);
+
+        return redirect()->route('owners.index')
+            ->with('success', 'Owner deleted successfully.');
     }
 }
