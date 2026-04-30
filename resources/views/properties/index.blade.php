@@ -6,6 +6,49 @@
     <a href="{{ route('properties.create') }}" class="btn btn-primary">Add Property</a>
 </div>
 
+{{-- Filter Form --}}
+<form method="GET" action="{{ route('properties.index') }}" class="row g-2 mb-4">
+    <div class="col-md-3">
+        <select name="branch_no" class="form-control">
+            <option value="">-- All Branches --</option>
+            @foreach($branches as $branch)
+                <option value="{{ $branch->branch_no }}" 
+                    {{ request('branch_no') == $branch->branch_no ? 'selected' : '' }}>
+                    {{ $branch->branch_no }} - {{ $branch->city }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="type" class="form-control">
+            <option value="">-- All Types --</option>
+            @foreach(['Flat','House','Studio','Detached'] as $type)
+                <option value="{{ $type }}" 
+                    {{ request('type') == $type ? 'selected' : '' }}>
+                    {{ $type }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="number" name="max_rent" class="form-control" 
+               placeholder="Max Rent" value="{{ request('max_rent') }}">
+    </div>
+    <div class="col-md-2">
+        <select name="status" class="form-control">
+            <option value="">-- All Status --</option>
+            <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Available</option>
+            <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Withdrawn</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-dark w-100">Filter</button>
+    </div>
+    <div class="col-md-1">
+        <a href="{{ route('properties.index') }}" class="btn btn-secondary w-100">Reset</a>
+    </div>
+</form>
+
 <table class="table table-bordered table-hover">
     <thead class="table-dark">
         <tr>
@@ -30,8 +73,8 @@
             <td>{{ $property->type }}</td>
             <td>{{ $property->rooms }}</td>
             <td>£{{ number_format($property->rent, 2) }}</td>
-            <td>{{ $property->owner ? $property->owner->f_name . ' ' . $property->owner->l_name : 'N/A' }}</td>
-            <td>{{ $property->branch ? $property->branch->city : 'N/A' }}</td>
+            <td>{{ $property->owner_fname ?? 'N/A' }} {{ $property->owner_lname ?? '' }}</td>
+            <td>{{ $property->branch_city ?? 'N/A' }}</td>
             <td>
                 @if($property->is_available)
                     <span class="badge bg-success">Available</span>
@@ -40,10 +83,13 @@
                 @endif
             </td>
             <td>
-                <a href="{{ route('properties.edit', $property->property_no) }}" class="btn btn-sm btn-warning">Edit</a>
-                <form action="{{ route('properties.destroy', $property->property_no) }}" method="POST" class="d-inline">
+                <a href="{{ route('properties.edit', $property->property_no) }}" 
+                   class="btn btn-sm btn-warning">Edit</a>
+                <form action="{{ route('properties.destroy', $property->property_no) }}" 
+                      method="POST" class="d-inline">
                     @csrf @method('DELETE')
-                    <button onclick="return confirm('Delete this property?')" class="btn btn-sm btn-danger">Delete</button>
+                    <button onclick="return confirm('Delete this property?')" 
+                            class="btn btn-sm btn-danger">Delete</button>
                 </form>
             </td>
         </tr>
@@ -52,4 +98,4 @@
         @endforelse
     </tbody>
 </table>
-@end
+@endsection
