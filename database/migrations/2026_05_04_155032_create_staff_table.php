@@ -1,0 +1,22 @@
+<?php
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void {
+        Schema::create('staff', function (Blueprint $table) {
+            $table->char('staff_no', 5)->primary();
+            $table->string('f_name', 30);
+            $table->string('l_name', 40);
+            $table->string('position', 20)->nullable();
+            $table->char('branch_no', 4)->nullable();
+            $table->foreign('branch_no')->references('branch_no')->on('branches');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void {
+        Schema::dropIfExists('staff');
+    }
+};
