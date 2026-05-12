@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('properties.index') }}">DreamHome</a>
+            <a class="navbar-brand" href="{{ route('dashboard') }}">DreamHome</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
@@ -36,6 +36,21 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('inspections.index') }}">Inspections</a>
                     </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    @auth
+                    <li class="nav-item">
+                        <span class="nav-link text-white-50">{{ Auth::user()->name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-outline-light my-2">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                    @endauth
                 </ul>
             </div>
         </div>
