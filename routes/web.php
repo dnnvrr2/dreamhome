@@ -19,18 +19,26 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Protected routes
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('dashboard');
-    });
-
+    Route::get('/', fn() => redirect()->route('dashboard'));
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('branches', BranchController::class);
-    Route::resource('owners', OwnerController::class);
-    Route::resource('properties', PropertyController::class);
-    Route::resource('staff', StaffController::class);
-    Route::resource('clients', ClientController::class);
-    Route::resource('leases', LeaseController::class);
-    Route::resource('viewings', ViewingController::class);
-    Route::resource('inspections', InspectionController::class);
+    // Admin + Manager only
+    Route::middleware('role:admin,manager')->group(function () {
+        Route::resource('staff', StaffController::class);
+        Route::resource('leases', LeaseController::class);
+    });
+
+    // Admin + Manager + Supervisor
+    Route::middleware('role:admin,manager,supervisor')->group(function () {
+        Route::resource('properties', PropertyController::class);
+        Route::resource('owners', OwnerController::class);
+        Route::resource('clients', ClientController::class);
+        Route::resource('viewings', ViewingController::class);
+        Route::resource('inspections', InspectionController::class);
+    });
+
+    // All roles
+    Route::middleware('role:admin,manager,supervisor,staff')->group(function () {
+        Route::resource('branches', BranchController::class);
+    });
 });

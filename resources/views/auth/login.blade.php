@@ -5,34 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DreamHome — Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <style>
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: url('/images/login.jpg') no-repeat center center fixed;
+            background-size: cover;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .login-card {
-            background: white;
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 16px;
             padding: 40px;
             width: 100%;
             max-width: 420px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
         }
         .brand-icon {
             width: 60px;
             height: 60px;
-            background: #1a1a2e;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 16px;
         }
+        h4, p {
+            color: white !important;
+        }
+        .form-label {
+            color: white !important;
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
+            color: white;
+            box-shadow: none;
+        }
         .btn-login {
-            background: #1a1a2e;
+            background: rgba(29, 29, 29, 0.85);
             color: white;
             border: none;
             padding: 12px;
@@ -40,12 +61,11 @@
             font-weight: 500;
         }
         .btn-login:hover {
-            background: #2d2d4e;
+            background: rgba(30, 30, 60, 1);
             color: white;
         }
-        .form-control:focus {
-            border-color: #1a1a2e;
-            box-shadow: 0 0 0 0.2rem rgba(26,26,46,0.15);
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7) !important;
         }
     </style>
 </head>
@@ -53,13 +73,10 @@
     <div class="login-card">
         <div class="text-center mb-4">
             <div class="brand-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 16 16">
-                    <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
-                    <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
-                </svg>
+                <img src="/images/logo.png" alt="DreamHome Logo" style="width: 60px; height: 60px; object-fit: contain;">
             </div>
             <h4 class="fw-bold mb-1">DreamHome</h4>
-            <p class="text-muted small">Property Management System</p>
+            <p class="small">Property Management System</p>
         </div>
 
         @if($errors->any())
@@ -71,21 +88,21 @@
         <form action="{{ route('login.post') }}" method="POST">
             @csrf
             <div class="mb-3">
-                <label class="form-label small fw-500">Email Address</label>
+                <label class="form-label small">Email Address</label>
                 <input type="email" name="email" class="form-control"
-                       value="{{ old('email') }}" placeholder="admin@dreamhome.com" required>
+                       value="{{ old('email') }}" placeholder="Enter your email" required>
             </div>
             <div class="mb-4">
-                <label class="form-label small fw-500">Password</label>
+                <label class="form-label small">Password</label>
                 <input type="password" name="password" class="form-control"
-                       placeholder="••••••••" required>
+                       placeholder="Enter your password" required>
             </div>
             <button type="submit" class="btn btn-login w-100">
                 Sign In
             </button>
         </form>
 
-        <p class="text-center text-muted small mt-4 mb-0">
+        <p class="text-center small mt-4 mb-0 footer-text">
             DreamHome Property Rental Management
         </p>
     </div>
