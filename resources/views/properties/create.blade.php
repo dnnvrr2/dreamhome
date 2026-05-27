@@ -8,7 +8,7 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label>Property No</label>
-                <input type="text" name="property_no" class="form-control" maxlength="5" required>
+                <input type="text" class="form-control" value="{{ $propertyNo }}" readonly>
             </div>
             <div class="mb-3">
                 <label>Street</label>
@@ -61,6 +61,17 @@
                     <option value="">-- Select Branch --</option>
                     @foreach($branches as $branch)
                         <option value="{{ $branch->branch_no }}">{{ $branch->branch_no }} - {{ $branch->city }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
+                <label>Managed By</label>
+                <select name="staff_no" class="form-control">
+                    <option value="">-- Select Staff --</option>
+                    @foreach($staff as $s)
+                        <option value="{{ $s->staff_no }}" {{ old('staff_no') == $s->staff_no ? 'selected' : '' }}>
+                            {{ $s->staff_no }} - {{ $s->f_name }} {{ $s->l_name }}
+                        </option>
                     @endforeach
                 </select>
             </div>

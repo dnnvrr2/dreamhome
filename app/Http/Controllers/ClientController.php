@@ -54,16 +54,18 @@ class ClientController extends Controller
     {
         $branches = DB::select("SELECT * FROM branches ORDER BY branch_no");
         $staff    = DB::select("SELECT * FROM staff ORDER BY staff_no");
-        return view('clients.create', compact('branches', 'staff'));
+        $clientNo = $this->nextPrefixedId('clients', 'client_no', 'C', 4);
+        return view('clients.create', compact('branches', 'staff', 'clientNo'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'client_no' => 'required|unique:clients|max:5',
             'f_name'    => 'required|max:30',
             'l_name'    => 'required|max:40',
         ]);
+
+        $clientNo = $this->nextPrefixedId('clients', 'client_no', 'C', 4);
 
         DB::insert("
             INSERT INTO clients
@@ -72,7 +74,7 @@ class ClientController extends Controller
                  created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
         ", [
-            $request->client_no,
+            $clientNo,
             $request->f_name,
             $request->l_name,
             $request->street,

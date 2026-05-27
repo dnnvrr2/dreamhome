@@ -49,13 +49,17 @@ class LeaseController extends Controller
         $clients    = DB::select("SELECT * FROM clients ORDER BY client_no");
         $properties = DB::select("SELECT * FROM properties WHERE is_available = true ORDER BY property_no");
         $staff      = DB::select("SELECT * FROM staff ORDER BY staff_no");
-        return view('leases.create', compact('clients', 'properties', 'staff'));
+        $leaseNo    = $this->nextPrefixedId('leases', 'lease_no', 'L', 4);
+        return view('leases.create', compact('clients', 'properties', 'staff', 'leaseNo'));
     }
 
     public function store(Request $request)
     {
+        $request->merge([
+            'date_end' => $this->calculateLeaseEndDate($request->date_start, $request->duration_month),
+        ]);
+
         $request->validate([
-            'lease_no'      => 'required|max:5|unique:leases',
             'client_no'     => 'required',
             'property_no'   => 'required',
             'date_start'    => 'required|date',
@@ -63,6 +67,8 @@ class LeaseController extends Controller
             'monthly_rent'  => 'required|numeric',
             'duration_month'=> 'required|integer|min:3|max:12',
         ]);
+
+        $leaseNo = $this->nextPrefixedId('leases', 'lease_no', 'L', 4);
 
         try {
             DB::insert("
@@ -72,7 +78,7 @@ class LeaseController extends Controller
                      created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
             ", [
-                $request->lease_no,
+                $leaseNo,
                 $request->monthly_rent,
                 $request->payment_method,
                 $request->deposit,
@@ -123,6 +129,10 @@ class LeaseController extends Controller
 
     public function update(Request $request, $lease_no)
     {
+        $request->merge([
+            'date_end' => $this->calculateLeaseEndDate($request->date_start, $request->duration_month),
+        ]);
+
         $request->validate([
             'date_start'    => 'required|date',
             'date_end'      => 'required|date|after:date_start',
@@ -176,5 +186,17 @@ class LeaseController extends Controller
 
         return redirect()->route('leases.index')
             ->with('success', 'Lease deleted successfully.');
+    }
+
+    private function calculateLeaseEndDate(?string $startDate, mixed $durationMonth): ?string
+    {
+        if (!$startDate || !$durationMonth) {
+            return null;
+        }
+
+        return \Carbon\Carbon::parse($startDate)
+            ->addMonthsNoOverflow((int) $durationMonth)
+            ->subDay()
+            ->toDateString();
     }
 }

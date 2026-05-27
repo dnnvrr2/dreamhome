@@ -46,18 +46,20 @@ class StaffController extends Controller
     {
         $branches    = DB::select("SELECT * FROM branches ORDER BY branch_no");
         $supervisors = DB::select("SELECT * FROM staff WHERE position = 'Supervisor' ORDER BY staff_no");
-        return view('staff.create', compact('branches', 'supervisors'));
+        $staffNo = $this->nextPrefixedId('staff', 'staff_no', 'S', 4);
+        return view('staff.create', compact('branches', 'supervisors', 'staffNo'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'staff_no' => 'required|max:5|unique:staff',
             'f_name'   => 'required|max:30',
             'l_name'   => 'required|max:30',
             'position' => 'required|max:20',
             'salary'   => 'nullable|numeric',
         ]);
+
+        $staffNo = $this->nextPrefixedId('staff', 'staff_no', 'S', 4);
 
         DB::insert("
             INSERT INTO staff
@@ -66,7 +68,7 @@ class StaffController extends Controller
                  branch_no, supervisor_no, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
         ", [
-            $request->staff_no,
+            $staffNo,
             $request->f_name,
             $request->l_name,
             $request->street,
@@ -90,7 +92,7 @@ class StaffController extends Controller
                 INSERT INTO managers (staff_no, date_start, car_allowance, bonus, created_at, updated_at)
                 VALUES (?, ?, ?, ?, NOW(), NOW())
             ", [
-                $request->staff_no,
+                $staffNo,
                 $request->date_start,
                 $request->car_allowance,
                 $request->bonus,
@@ -100,14 +102,14 @@ class StaffController extends Controller
                 INSERT INTO secretaries (staff_no, typing_speed, created_at, updated_at)
                 VALUES (?, ?, NOW(), NOW())
             ", [
-                $request->staff_no,
+                $staffNo,
                 $request->typing_speed,
             ]);
         } elseif ($request->position === 'Supervisor') {
             DB::insert("
                 INSERT INTO supervisors (staff_no, created_at, updated_at)
                 VALUES (?, NOW(), NOW())
-            ", [$request->staff_no]);
+            ", [$staffNo]);
         }
 
         // Insert next of kin if provided
@@ -117,7 +119,7 @@ class StaffController extends Controller
                     (staff_no, full_name, relationship, street, city, tel_no, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
             ", [
-                $request->staff_no,
+                $staffNo,
                 $request->kin_full_name,
                 $request->kin_relationship,
                 $request->kin_street,

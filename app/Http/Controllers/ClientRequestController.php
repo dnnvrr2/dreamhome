@@ -186,21 +186,6 @@ class ClientRequestController extends Controller
 
     private function nextClientNo(): string
     {
-        $lastClient = DB::selectOne("
-            SELECT client_no
-            FROM clients
-            WHERE client_no LIKE 'C%'
-            ORDER BY client_no DESC
-        ");
-
-        $nextNumber = $lastClient ? ((int) substr($lastClient->client_no, 1)) + 1 : 1;
-
-        do {
-            $clientNo = 'C' . str_pad((string) $nextNumber, 4, '0', STR_PAD_LEFT);
-            $exists = DB::selectOne("SELECT client_no FROM clients WHERE client_no = ?", [$clientNo]);
-            $nextNumber++;
-        } while ($exists);
-
-        return $clientNo;
+        return $this->nextPrefixedId('clients', 'client_no', 'C', 4);
     }
 }

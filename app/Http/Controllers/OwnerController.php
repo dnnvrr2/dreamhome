@@ -15,23 +15,25 @@ class OwnerController extends Controller
 
     public function create()
     {
-        return view('owners.create');
+        $ownerNo = $this->nextPrefixedId('owners', 'owner_no', 'O', 4);
+        return view('owners.create', compact('ownerNo'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'owner_no' => 'required|unique:owners|max:5',
             'f_name'   => 'required|max:30',
             'l_name'   => 'required|max:30',
         ]);
+
+        $ownerNo = $this->nextPrefixedId('owners', 'owner_no', 'O', 4);
 
         DB::insert("
             INSERT INTO owners
                 (owner_no, f_name, l_name, street, city, postcode, tel_no, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
         ", [
-            $request->owner_no,
+            $ownerNo,
             $request->f_name,
             $request->l_name,
             $request->street,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 
 abstract class Controller
 {
@@ -15,5 +16,20 @@ abstract class Controller
         }
 
         return $fallback;
+    }
+
+    protected function nextPrefixedId(string $table, string $column, string $prefix, int $digits): string
+    {
+        $pattern = '^' . preg_quote($prefix, '/') . '[0-9]{' . $digits . '}$';
+
+        $row = DB::selectOne("
+            SELECT MAX(CAST(SUBSTRING({$column} FROM 2) AS INTEGER)) AS max_number
+            FROM {$table}
+            WHERE {$column} ~ ?
+        ", [$pattern]);
+
+        $nextNumber = ((int) ($row->max_number ?? 0)) + 1;
+
+        return $prefix . str_pad((string) $nextNumber, $digits, '0', STR_PAD_LEFT);
     }
 }

@@ -13,6 +13,7 @@ use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\ViewingController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\PublicPropertyController;
+use App\Http\Controllers\AdvertController;
 
 // Public property browsing and client requests
 Route::get('/properties-for-rent', [PublicPropertyController::class, 'index'])->name('public.properties');
@@ -39,15 +40,16 @@ Route::middleware('auth')->group(function () {
 
     // Admin + Manager + Supervisor
     Route::middleware('role:admin,manager,supervisor')->group(function () {
-        Route::resource('properties', PropertyController::class);
-        Route::resource('owners', OwnerController::class);
-        Route::resource('clients', ClientController::class);
-        Route::resource('viewings', ViewingController::class);
-        Route::resource('inspections', InspectionController::class);
+        Route::resource('properties', PropertyController::class)->except(['show']);
+        Route::resource('owners', OwnerController::class)->except(['show']);
+        Route::resource('clients', ClientController::class)->except(['show']);
+        Route::resource('viewings', ViewingController::class)->except(['show']);
+        Route::resource('inspections', InspectionController::class)->except(['show']);
+        Route::resource('adverts', AdvertController::class)->except(['show']);
     });
 
     // All roles
     Route::middleware('role:admin,manager,supervisor,staff')->group(function () {
-        Route::resource('branches', BranchController::class);
+        Route::resource('branches', BranchController::class)->except(['show']);
     });
 });

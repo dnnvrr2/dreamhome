@@ -6,7 +6,7 @@
     @csrf
     <div class="mb-3">
         <label>Branch No</label>
-        <input type="text" name="branch_no" class="form-control" maxlength="4" required>
+        <input type="text" class="form-control" value="{{ $branchNo }}" readonly>
     </div>
     <div class="mb-3">
         <label>Street</label>

@@ -14,10 +14,13 @@ class PropertyApiController extends Controller
             SELECT p.*,
                    o.f_name AS owner_fname,
                    o.l_name AS owner_lname,
-                   b.city   AS branch_city
+                   b.city   AS branch_city,
+                   s.f_name AS staff_fname,
+                   s.l_name AS staff_lname
             FROM properties p
             LEFT JOIN owners o ON p.owner_no = o.owner_no
             LEFT JOIN branches b ON p.branch_no = b.branch_no
+            LEFT JOIN staff s ON p.staff_no = s.staff_no
             WHERE 1=1
         ";
 
@@ -54,10 +57,13 @@ class PropertyApiController extends Controller
             SELECT p.*,
                    o.f_name AS owner_fname,
                    o.l_name AS owner_lname,
-                   b.city   AS branch_city
+                   b.city   AS branch_city,
+                   s.f_name AS staff_fname,
+                   s.l_name AS staff_lname
             FROM properties p
             LEFT JOIN owners o ON p.owner_no = o.owner_no
             LEFT JOIN branches b ON p.branch_no = b.branch_no
+            LEFT JOIN staff s ON p.staff_no = s.staff_no
             WHERE p.property_no = ?
         ", [$property_no]);
 
@@ -71,20 +77,22 @@ class PropertyApiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'property_no' => 'required|max:5|unique:properties',
             'street'      => 'required',
             'city'        => 'required',
             'rent'        => 'required|numeric',
             'rooms'       => 'required|integer',
+            'staff_no'    => 'nullable|exists:staff,staff_no',
         ]);
+
+        $propertyNo = $this->nextPrefixedId('properties', 'property_no', 'P', 4);
 
         DB::insert("
             INSERT INTO properties
                 (property_no, street, area, city, postcode, type, rooms, rent,
-                 is_available, owner_no, branch_no, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+                 is_available, owner_no, branch_no, staff_no, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
         ", [
-            $request->property_no,
+            $propertyNo,
             $request->street,
             $request->area,
             $request->city,
@@ -95,9 +103,14 @@ class PropertyApiController extends Controller
             $request->is_available ?? true,
             $request->owner_no,
             $request->branch_no,
+            $request->staff_no,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Property created'], 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Property created',
+            'property_no' => $propertyNo,
+        ], 201);
     }
 
     public function update(Request $request, $property_no)
@@ -114,6 +127,7 @@ class PropertyApiController extends Controller
                 is_available = ?,
                 owner_no     = ?,
                 branch_no    = ?,
+                staff_no     = ?,
                 updated_at   = NOW()
             WHERE property_no = ?
         ", [
@@ -127,6 +141,7 @@ class PropertyApiController extends Controller
             $request->is_available ?? true,
             $request->owner_no,
             $request->branch_no,
+            $request->staff_no,
             $property_no,
         ]);
 

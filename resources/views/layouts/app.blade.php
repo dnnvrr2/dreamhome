@@ -21,7 +21,7 @@
         /* Sidebar */
         #sidebar {
             width: 240px;
-            min-height: 100vh;
+            height: 100vh;
             background: url('/images/sidebar.jpg') no-repeat center center;
             background-size: cover;
             display: flex;
@@ -45,6 +45,7 @@
             padding: 20px 16px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             text-decoration: none;
+            flex-shrink: 0;
         }
 
         .sidebar-brand img {
@@ -70,8 +71,24 @@
 
         .sidebar-nav {
             flex: 1;
+            min-height: 0;
             padding: 12px 8px;
             overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.35) transparent;
+        }
+
+        .sidebar-nav::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.35);
+            border-radius: 999px;
         }
 
         .nav-label {
@@ -133,6 +150,8 @@
         .sidebar-footer {
             padding: 16px;
             border-top: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.28);
         }
 
         .user-info {
@@ -314,6 +333,10 @@
         <a href="{{ route('inspections.index') }}" class="sidebar-link {{ request()->routeIs('inspections*') ? 'active' : '' }}">
             <i class="bi bi-clipboard-check"></i>
             <span>Inspections</span>
+        </a>
+        <a href="{{ route('adverts.index') }}" class="sidebar-link {{ request()->routeIs('adverts*') ? 'active' : '' }}">
+            <i class="bi bi-newspaper"></i>
+            <span>Adverts</span>
         </a>
         @endif
 

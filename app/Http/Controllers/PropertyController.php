@@ -14,6 +14,7 @@ class PropertyController extends Controller
     public function index(Request $request)
     {
         $branch_no  = $request->branch_no;
+        $staff_no   = $request->staff_no;
         $type       = $request->type;
         $max_rent   = $request->max_rent;
         $status     = $request->status;
@@ -31,10 +32,13 @@ class PropertyController extends Controller
                 SELECT p.*,
                     o.f_name AS owner_fname,
                     o.l_name AS owner_lname,
-                    b.city AS branch_city
+                    b.city AS branch_city,
+                    s.f_name AS staff_fname,
+                    s.l_name AS staff_lname
                 FROM properties p
                 LEFT JOIN owners o ON p.owner_no = o.owner_no
                 LEFT JOIN branches b ON p.branch_no = b.branch_no
+                LEFT JOIN staff s ON p.staff_no = s.staff_no
                 WHERE 1=1
             ";
 
@@ -43,6 +47,11 @@ class PropertyController extends Controller
         if ($branch_no) {
             $sql .= " AND {$propertyAlias}.branch_no = ?";
             $params[] = $branch_no;
+        }
+
+        if ($staff_no) {
+            $sql .= " AND {$propertyAlias}.staff_no = ?";
+            $params[] = $staff_no;
         }
 
         if ($type) {
@@ -66,36 +75,41 @@ class PropertyController extends Controller
 
         $properties = DB::select($sql, $params);
         $branches   = DB::select("SELECT * FROM branches ORDER BY branch_no");
+        $staff      = DB::select("SELECT * FROM staff ORDER BY staff_no");
         
-        return view('properties.index', compact('properties', 'branches'));
+        return view('properties.index', compact('properties', 'branches', 'staff'));
     }
 
     public function create()
     {
         $owners   = DB::select("SELECT * FROM owners ORDER BY owner_no");
         $branches = DB::select("SELECT * FROM branches ORDER BY branch_no");
-        return view('properties.create', compact('owners', 'branches'));
+        $staff    = DB::select("SELECT * FROM staff ORDER BY staff_no");
+        $propertyNo = $this->nextPrefixedId('properties', 'property_no', 'P', 4);
+        return view('properties.create', compact('owners', 'branches', 'staff', 'propertyNo'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'property_no' => 'required|unique:properties|max:5',
             'street'      => 'required|max:60',
             'city'        => 'required|max:30',
             'rent'        => 'required|numeric|min:100',
             'rooms'       => 'required|integer|min:1',
+            'staff_no'    => 'nullable|exists:staff,staff_no',
         ]);
 
+        $propertyNo = $this->nextPrefixedId('properties', 'property_no', 'P', 4);
+
         try {
-            DB::transaction(function () use ($request) {
+            DB::transaction(function () use ($request, $propertyNo) {
                 DB::statement("
                     CALL sp_add_property(
                         ?::varchar, ?::varchar, ?::varchar, ?::varchar,
-                        ?::smallint, ?::numeric, ?::varchar, ?::varchar
+                        ?::smallint, ?::numeric, ?::varchar, ?::varchar, ?::varchar
                     )
                 ", [
-                    $request->property_no,
+                    $propertyNo,
                     $request->street,
                     $request->city,
                     $request->type,
@@ -103,6 +117,7 @@ class PropertyController extends Controller
                     $request->rent,
                     $request->owner_no,
                     $request->branch_no,
+                    $request->staff_no,
                 ]);
 
                 DB::update("
@@ -116,7 +131,7 @@ class PropertyController extends Controller
                     $request->area,
                     $request->postcode,
                     $request->is_available ?? true,
-                    $request->property_no,
+                    $propertyNo,
                 ]);
             });
         } catch (QueryException $exception) {
@@ -143,8 +158,9 @@ class PropertyController extends Controller
         $property = $property[0] ?? abort(404);
         $owners   = DB::select("SELECT * FROM owners ORDER BY owner_no");
         $branches = DB::select("SELECT * FROM branches ORDER BY branch_no");
+        $staff    = DB::select("SELECT * FROM staff ORDER BY staff_no");
 
-        return view('properties.edit', compact('property', 'owners', 'branches'));
+        return view('properties.edit', compact('property', 'owners', 'branches', 'staff'));
     }
 
     public function update(Request $request, $property_no)
@@ -154,6 +170,7 @@ class PropertyController extends Controller
             'city'   => 'required|max:30',
             'rent'   => 'required|numeric|min:100',
             'rooms'  => 'required|integer|min:1',
+            'staff_no' => 'nullable|exists:staff,staff_no',
         ]);
 
         try {
@@ -182,6 +199,7 @@ class PropertyController extends Controller
                         rooms        = ?,
                         is_available = ?,
                         owner_no     = ?,
+                        staff_no     = ?,
                         updated_at   = NOW()
                     WHERE property_no = ?
                 ", [
@@ -193,6 +211,7 @@ class PropertyController extends Controller
                     $request->rooms,
                     $request->is_available ?? true,
                     $request->owner_no,
+                    $request->staff_no,
                     $property_no,
                 ]);
             });

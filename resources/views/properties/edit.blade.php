@@ -68,6 +68,17 @@
                 </select>
             </div>
             <div class="mb-3">
+                <label>Managed By</label>
+                <select name="staff_no" class="form-control">
+                    <option value="">-- Select Staff --</option>
+                    @foreach($staff as $s)
+                        <option value="{{ $s->staff_no }}" {{ $property->staff_no == $s->staff_no ? 'selected' : '' }}>
+                            {{ $s->staff_no }} - {{ $s->f_name }} {{ $s->l_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
                 <label>Status</label>
                 <select name="is_available" class="form-control">
                     <option value="1" {{ $property->is_available ? 'selected' : '' }}>Available</option>

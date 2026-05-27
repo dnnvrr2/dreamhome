@@ -35,6 +35,16 @@
                placeholder="Max Rent" value="{{ request('max_rent') }}">
     </div>
     <div class="col-md-2">
+        <select name="staff_no" class="form-control">
+            <option value="">-- All Staff --</option>
+            @foreach($staff as $s)
+                <option value="{{ $s->staff_no }}" {{ request('staff_no') == $s->staff_no ? 'selected' : '' }}>
+                    {{ $s->staff_no }} - {{ $s->f_name }} {{ $s->l_name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-2">
         <select name="status" class="form-control">
             <option value="">-- All Status --</option>
             <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Available</option>
@@ -60,6 +70,7 @@
             <th>Rent</th>
             <th>Owner</th>
             <th>Branch</th>
+            <th>Managed By</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
@@ -75,6 +86,7 @@
             <td>£{{ number_format($property->rent, 2) }}</td>
             <td>{{ $property->owner_fname ?? 'N/A' }} {{ $property->owner_lname ?? '' }}</td>
             <td>{{ $property->branch_city ?? 'N/A' }}</td>
+            <td>{{ $property->staff_fname ?? 'N/A' }} {{ $property->staff_lname ?? '' }}</td>
             <td>
                 @if($property->is_available)
                     <span class="badge bg-success">Available</span>
@@ -94,7 +106,7 @@
             </td>
         </tr>
         @empty
-        <tr><td colspan="10" class="text-center">No properties found.</td></tr>
+        <tr><td colspan="11" class="text-center">No properties found.</td></tr>
         @endforelse
     </tbody>
 </table>

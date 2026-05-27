@@ -16,7 +16,7 @@
 <div class="row g-2">
     <div class="col-md-2">
         <label>Staff No</label>
-        <input type="text" name="staff_no" class="form-control" maxlength="5" value="{{ old('staff_no') }}" required>
+        <input type="text" class="form-control" value="{{ $staffNo }}" readonly>
     </div>
     <div class="col-md-3">
         <label>First Name</label>

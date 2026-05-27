@@ -14,7 +14,7 @@
 <div class="row g-2">
     <div class="col-md-2">
         <label>Lease No</label>
-        <input type="text" name="lease_no" class="form-control" maxlength="5" value="{{ old('lease_no') }}" required>
+        <input type="text" class="form-control" value="{{ $leaseNo }}" readonly>
     </div>
     <div class="col-md-3">
         <label>Client</label>
@@ -79,11 +79,18 @@
     </div>
     <div class="col-md-3 mt-2">
         <label>End Date</label>
-        <input type="date" name="date_end" class="form-control" value="{{ old('date_end') }}" required>
+        <input type="date" name="date_end" class="form-control" value="{{ old('date_end') }}" readonly required>
     </div>
     <div class="col-md-3 mt-2">
         <label>Duration (months, 3–12)</label>
-        <input type="number" name="duration_month" class="form-control" min="3" max="12" value="{{ old('duration_month') }}" required>
+        <select name="duration_month" class="form-control" required>
+            <option value="">-- Select Months --</option>
+            @for($month = 3; $month <= 12; $month++)
+                <option value="{{ $month }}" {{ old('duration_month') == $month ? 'selected' : '' }}>
+                    {{ $month }} months
+                </option>
+            @endfor
+        </select>
     </div>
 </div>
 <div class="mt-4">
@@ -91,4 +98,36 @@
     <a href="{{ route('leases.index') }}" class="btn btn-secondary">Cancel</a>
 </div>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const startInput = document.querySelector('[name="date_start"]');
+        const durationInput = document.querySelector('[name="duration_month"]');
+        const endInput = document.querySelector('[name="date_end"]');
+
+        const addMonthsNoOverflow = (date, months) => {
+            const targetMonth = date.getMonth() + months;
+            const lastDayOfTargetMonth = new Date(date.getFullYear(), targetMonth + 1, 0).getDate();
+            const targetDay = Math.min(date.getDate(), lastDayOfTargetMonth);
+
+            return new Date(date.getFullYear(), targetMonth, targetDay);
+        };
+
+        const calculateEndDate = () => {
+            if (!startInput.value || !durationInput.value) {
+                endInput.value = '';
+                return;
+            }
+
+            const startDate = new Date(`${startInput.value}T00:00:00`);
+            const endDate = addMonthsNoOverflow(startDate, Number(durationInput.value));
+            endDate.setDate(endDate.getDate() - 1);
+            endInput.value = endDate.toISOString().slice(0, 10);
+        };
+
+        startInput.addEventListener('change', calculateEndDate);
+        durationInput.addEventListener('change', calculateEndDate);
+        calculateEndDate();
+    });
+</script>
 @endsection

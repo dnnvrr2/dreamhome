@@ -8,7 +8,7 @@
     <div class="row g-3">
         <div class="col-md-2">
             <label>Client No</label>
-            <input type="text" name="client_no" class="form-control" required maxlength="5">
+            <input type="text" class="form-control" value="{{ $clientNo }}" readonly>
         </div>
         <div class="col-md-5">
             <label>First Name</label>

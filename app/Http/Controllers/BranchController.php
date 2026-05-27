@@ -15,24 +15,26 @@ class BranchController extends Controller
 
     public function create()
     {
-        return view('branches.create');
+        $branchNo = $this->nextPrefixedId('branches', 'branch_no', 'B', 3);
+        return view('branches.create', compact('branchNo'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'branch_no' => 'required|unique:branches|max:4',
             'street'    => 'required|max:60',
             'city'      => 'required|max:30',
             'postcode'  => 'required|max:10',
         ]);
+
+        $branchNo = $this->nextPrefixedId('branches', 'branch_no', 'B', 3);
 
         DB::insert("
             INSERT INTO branches 
                 (branch_no, street, area, city, postcode, tel_no, fax_no, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
         ", [
-            $request->branch_no,
+            $branchNo,
             $request->street,
             $request->area,
             $request->city,

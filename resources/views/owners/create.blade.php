@@ -7,7 +7,7 @@
     @csrf
     <div class="mb-3">
         <label>Owner No</label>
-        <input type="text" name="owner_no" class="form-control" maxlength="5" required>
+        <input type="text" class="form-control" value="{{ $ownerNo }}" readonly>
     </div>
     <div class="mb-3">
         <label>First Name</label>
