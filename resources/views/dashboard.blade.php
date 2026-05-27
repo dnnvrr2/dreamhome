@@ -75,6 +75,40 @@
     </div>
 </div>
 
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        Branch Summary
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-sm mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Branch</th>
+                    <th>Total</th>
+                    <th>Available</th>
+                    <th>Withdrawn</th>
+                    <th>Average Rent</th>
+                    <th>Total Rent</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($branchSummaries as $branch)
+                <tr>
+                    <td>{{ $branch->branch_no }} - {{ $branch->city }}</td>
+                    <td>{{ $branch->total_properties }}</td>
+                    <td>{{ $branch->available_properties }}</td>
+                    <td>{{ $branch->withdrawn_properties }}</td>
+                    <td>GBP {{ number_format($branch->avg_rent ?? 0, 2) }}</td>
+                    <td>GBP {{ number_format($branch->total_rent ?? 0, 2) }}</td>
+                </tr>
+                @empty
+                <tr><td colspan="6" class="text-center">No branch summary available</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
 {{-- Recent Activity --}}
 <div class="row g-3">
     <div class="col-md-6">

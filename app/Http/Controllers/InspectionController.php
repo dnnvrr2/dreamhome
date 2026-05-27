@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,12 +14,12 @@ class InspectionController extends Controller
         $staff_no    = $request->staff_no;
 
         $sql = "
-            SELECT i.*,
-                   p.street AS property_street, p.city AS property_city,
-                   s.f_name AS staff_fname, s.l_name AS staff_lname
+            SELECT i.inspection_id, i.property_no, i.staff_no,
+                   v.inspection_date, v.comments,
+                   v.street AS property_street, v.city AS property_city,
+                   v.inspector_fname AS staff_fname, v.inspector_lname AS staff_lname
             FROM inspections i
-            LEFT JOIN properties p ON i.property_no = p.property_no
-            LEFT JOIN staff s ON i.staff_no = s.staff_no
+            LEFT JOIN vw_inspection_report v ON i.inspection_id = v.inspection_id
             WHERE 1=1
         ";
 
@@ -58,15 +59,16 @@ class InspectionController extends Controller
             'inspection_date' => 'required|date',
         ]);
 
-        DB::insert("
-            INSERT INTO inspections (property_no, staff_no, inspection_date, comments, created_at, updated_at)
-            VALUES (?, ?, ?, ?, NOW(), NOW())
-        ", [
-            $request->property_no,
-            $request->staff_no,
-            $request->inspection_date,
-            $request->comments,
-        ]);
+        try {
+            DB::statement("CALL sp_record_inspection(?::varchar, ?::varchar, ?::date, ?::text)", [
+                $request->property_no,
+                $request->staff_no,
+                $request->inspection_date,
+                $request->comments,
+            ]);
+        } catch (QueryException $exception) {
+            return back()->withInput()->with('error', $this->databaseError($exception));
+        }
 
         return redirect()->route('inspections.index')
             ->with('success', 'Inspection recorded successfully.');
@@ -89,21 +91,25 @@ class InspectionController extends Controller
             'inspection_date' => 'required|date',
         ]);
 
-        DB::update("
-            UPDATE inspections
-            SET property_no     = ?,
-                staff_no        = ?,
-                inspection_date = ?,
-                comments        = ?,
-                updated_at      = NOW()
-            WHERE inspection_id = ?
-        ", [
-            $request->property_no,
-            $request->staff_no,
-            $request->inspection_date,
-            $request->comments,
-            $inspection_id,
-        ]);
+        try {
+            DB::update("
+                UPDATE inspections
+                SET property_no     = ?,
+                    staff_no        = ?,
+                    inspection_date = ?,
+                    comments        = ?,
+                    updated_at      = NOW()
+                WHERE inspection_id = ?
+            ", [
+                $request->property_no,
+                $request->staff_no,
+                $request->inspection_date,
+                $request->comments,
+                $inspection_id,
+            ]);
+        } catch (QueryException $exception) {
+            return back()->withInput()->with('error', $this->databaseError($exception));
+        }
 
         return redirect()->route('inspections.index')
             ->with('success', 'Inspection updated successfully.');
@@ -111,7 +117,12 @@ class InspectionController extends Controller
 
     public function destroy($inspection_id)
     {
-        DB::delete("DELETE FROM inspections WHERE inspection_id = ?", [$inspection_id]);
+        try {
+            DB::delete("DELETE FROM inspections WHERE inspection_id = ?", [$inspection_id]);
+        } catch (QueryException $exception) {
+            return back()->with('error', $this->databaseError($exception));
+        }
+
         return redirect()->route('inspections.index')
             ->with('success', 'Inspection deleted successfully.');
     }

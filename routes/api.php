@@ -32,4 +32,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Inspections
     Route::get('/inspections',  [InspectionApiController::class, 'index']);
     Route::post('/inspections', [InspectionApiController::class, 'store']);
+
+    
 });

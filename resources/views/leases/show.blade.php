@@ -30,6 +30,7 @@
             <div class="col-md-3 mt-2"><strong>Start Date:</strong> {{ $lease->date_start }}</div>
             <div class="col-md-3 mt-2"><strong>End Date:</strong> {{ $lease->date_end }}</div>
             <div class="col-md-3 mt-2"><strong>Duration:</strong> {{ $lease->duration_month }} months</div>
+            <div class="col-md-3 mt-2"><strong>Days:</strong> {{ $lease->duration_days }} days</div>
         </div>
     </div>
 </div>

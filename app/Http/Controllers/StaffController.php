@@ -14,12 +14,11 @@ class StaffController extends Controller
 
         $sql = "
             SELECT s.*,
-                   b.city AS branch_city,
-                   sup.f_name AS sup_fname,
-                   sup.l_name AS sup_lname
+                   v.branch_city,
+                   v.supervisor_fname AS sup_fname,
+                   v.supervisor_lname AS sup_lname
             FROM staff s
-            LEFT JOIN branches b ON s.branch_no = b.branch_no
-            LEFT JOIN staff sup ON s.supervisor_no = sup.staff_no
+            LEFT JOIN vw_staff_details v ON s.staff_no = v.staff_no
             WHERE 1=1
         ";
 

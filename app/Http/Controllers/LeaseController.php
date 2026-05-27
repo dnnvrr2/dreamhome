@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,14 +14,12 @@ class LeaseController extends Controller
         $property_no = $request->property_no;
 
         $sql = "
-            SELECT l.*,
-                   c.f_name AS client_fname, c.l_name AS client_lname,
-                   p.street AS property_street, p.city AS property_city,
-                   s.f_name AS staff_fname, s.l_name AS staff_lname
+            SELECT l.lease_no, l.monthly_rent, l.payment_method, l.deposit, l.deposit_paid,
+                   l.date_start, l.date_end, l.duration_month, l.client_no, l.property_no, l.staff_no,
+                   v.client_fname, v.client_lname, v.property_street, v.property_city,
+                   v.staff_fname, v.staff_lname
             FROM leases l
-            LEFT JOIN clients c ON l.client_no = c.client_no
-            LEFT JOIN properties p ON l.property_no = p.property_no
-            LEFT JOIN staff s ON l.staff_no = s.staff_no
+            LEFT JOIN vw_lease_summary v ON l.lease_no = v.lease_no
             WHERE 1=1
         ";
 
@@ -65,25 +64,29 @@ class LeaseController extends Controller
             'duration_month'=> 'required|integer|min:3|max:12',
         ]);
 
-        DB::insert("
-            INSERT INTO leases
-                (lease_no, monthly_rent, payment_method, deposit, deposit_paid,
-                 date_start, date_end, duration_month, client_no, property_no, staff_no,
-                 created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
-        ", [
-            $request->lease_no,
-            $request->monthly_rent,
-            $request->payment_method,
-            $request->deposit,
-            $request->deposit_paid ? true : false,
-            $request->date_start,
-            $request->date_end,
-            $request->duration_month,
-            $request->client_no,
-            $request->property_no,
-            $request->staff_no ?: null,
-        ]);
+        try {
+            DB::insert("
+                INSERT INTO leases
+                    (lease_no, monthly_rent, payment_method, deposit, deposit_paid,
+                     date_start, date_end, duration_month, client_no, property_no, staff_no,
+                     created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+            ", [
+                $request->lease_no,
+                $request->monthly_rent,
+                $request->payment_method,
+                $request->deposit,
+                $request->deposit_paid ? true : false,
+                $request->date_start,
+                $request->date_end,
+                $request->duration_month,
+                $request->client_no,
+                $request->property_no,
+                $request->staff_no ?: null,
+            ]);
+        } catch (QueryException $exception) {
+            return back()->withInput()->with('error', $this->databaseError($exception));
+        }
 
         return redirect()->route('leases.index')
             ->with('success', 'Lease created successfully.');
@@ -95,7 +98,8 @@ class LeaseController extends Controller
             SELECT l.*,
                    c.f_name AS client_fname, c.l_name AS client_lname,
                    p.street AS property_street, p.city AS property_city,
-                   s.f_name AS staff_fname, s.l_name AS staff_lname
+                   s.f_name AS staff_fname, s.l_name AS staff_lname,
+                   fn_lease_duration_days(l.lease_no::varchar) AS duration_days
             FROM leases l
             LEFT JOIN clients c ON l.client_no = c.client_no
             LEFT JOIN properties p ON l.property_no = p.property_no
@@ -126,33 +130,37 @@ class LeaseController extends Controller
             'duration_month'=> 'required|integer|min:3|max:12',
         ]);
 
-        DB::update("
-            UPDATE leases
-            SET monthly_rent   = ?,
-                payment_method = ?,
-                deposit        = ?,
-                deposit_paid   = ?,
-                date_start     = ?,
-                date_end       = ?,
-                duration_month = ?,
-                client_no      = ?,
-                property_no    = ?,
-                staff_no       = ?,
-                updated_at     = NOW()
-            WHERE lease_no = ?
-        ", [
-            $request->monthly_rent,
-            $request->payment_method,
-            $request->deposit,
-            $request->deposit_paid ? true : false,
-            $request->date_start,
-            $request->date_end,
-            $request->duration_month,
-            $request->client_no,
-            $request->property_no,
-            $request->staff_no ?: null,
-            $lease_no,
-        ]);
+        try {
+            DB::update("
+                UPDATE leases
+                SET monthly_rent   = ?,
+                    payment_method = ?,
+                    deposit        = ?,
+                    deposit_paid   = ?,
+                    date_start     = ?,
+                    date_end       = ?,
+                    duration_month = ?,
+                    client_no      = ?,
+                    property_no    = ?,
+                    staff_no       = ?,
+                    updated_at     = NOW()
+                WHERE lease_no = ?
+            ", [
+                $request->monthly_rent,
+                $request->payment_method,
+                $request->deposit,
+                $request->deposit_paid ? true : false,
+                $request->date_start,
+                $request->date_end,
+                $request->duration_month,
+                $request->client_no,
+                $request->property_no,
+                $request->staff_no ?: null,
+                $lease_no,
+            ]);
+        } catch (QueryException $exception) {
+            return back()->withInput()->with('error', $this->databaseError($exception));
+        }
 
         return redirect()->route('leases.index')
             ->with('success', 'Lease updated successfully.');
@@ -160,7 +168,12 @@ class LeaseController extends Controller
 
     public function destroy($lease_no)
     {
-        DB::delete("DELETE FROM leases WHERE lease_no = ?", [$lease_no]);
+        try {
+            DB::delete("DELETE FROM leases WHERE lease_no = ?", [$lease_no]);
+        } catch (QueryException $exception) {
+            return back()->with('error', $this->databaseError($exception));
+        }
+
         return redirect()->route('leases.index')
             ->with('success', 'Lease deleted successfully.');
     }

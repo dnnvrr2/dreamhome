@@ -301,6 +301,12 @@
             <i class="bi bi-people"></i>
             <span>Clients</span>
         </a>
+        @if(in_array(Auth::user()->role, ['admin', 'manager']))
+        <a href="{{ route('client-requests.index') }}" class="sidebar-link {{ request()->routeIs('client-requests*') ? 'active' : '' }}">
+            <i class="bi bi-envelope-check"></i>
+            <span>Client Requests</span>
+        </a>
+        @endif
         <a href="{{ route('viewings.index') }}" class="sidebar-link {{ request()->routeIs('viewings*') ? 'active' : '' }}">
             <i class="bi bi-eye"></i>
             <span>Viewings</span>
@@ -355,6 +361,13 @@
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
