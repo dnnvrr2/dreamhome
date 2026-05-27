@@ -85,8 +85,13 @@ class PropertyController extends Controller
         $owners   = DB::select("SELECT * FROM owners ORDER BY owner_no");
         $branches = DB::select("SELECT * FROM branches ORDER BY branch_no");
         $staff    = DB::select("SELECT * FROM staff ORDER BY staff_no");
-        $propertyNo = $this->nextPrefixedId('properties', 'property_no', 'P', 4);
-        return view('properties.create', compact('owners', 'branches', 'staff', 'propertyNo'));
+        $branchPropertyNos = [];
+
+        foreach ($branches as $branch) {
+            $branchPropertyNos[$branch->branch_no] = $this->nextPropertyNoForBranch($branch->branch_no);
+        }
+
+        return view('properties.create', compact('owners', 'branches', 'staff', 'branchPropertyNos'));
     }
 
     public function store(Request $request)
@@ -96,10 +101,11 @@ class PropertyController extends Controller
             'city'        => 'required|max:30',
             'rent'        => 'required|numeric|min:100',
             'rooms'       => 'required|integer|min:1',
+            'branch_no'   => 'required|exists:branches,branch_no',
             'staff_no'    => 'nullable|exists:staff,staff_no',
         ]);
 
-        $propertyNo = $this->nextPrefixedId('properties', 'property_no', 'P', 4);
+        $propertyNo = $this->nextPropertyNoForBranch($request->branch_no);
 
         try {
             DB::transaction(function () use ($request, $propertyNo) {
@@ -233,5 +239,13 @@ class PropertyController extends Controller
 
         return redirect()->route('properties.index')
             ->with('success', 'Property deleted successfully.');
+    }
+
+    private function nextPropertyNoForBranch(string $branchNo): string
+    {
+        $branch = DB::selectOne("SELECT city FROM branches WHERE branch_no = ?", [$branchNo]);
+        $cityInitial = strtoupper(substr((string) ($branch->city ?? ''), 0, 1)) ?: 'X';
+
+        return $this->nextPrefixedId('properties', 'property_no', 'P' . $cityInitial, 3);
     }
 }

@@ -8,7 +8,7 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label>Property No</label>
-                <input type="text" class="form-control" value="{{ $propertyNo }}" readonly>
+                <input type="text" id="property_no_preview" class="form-control" value="" readonly>
             </div>
             <div class="mb-3">
                 <label>Street</label>
@@ -60,7 +60,9 @@
                 <select name="branch_no" class="form-control">
                     <option value="">-- Select Branch --</option>
                     @foreach($branches as $branch)
-                        <option value="{{ $branch->branch_no }}">{{ $branch->branch_no }} - {{ $branch->city }}</option>
+                        <option value="{{ $branch->branch_no }}" {{ old('branch_no') == $branch->branch_no ? 'selected' : '' }}>
+                            {{ $branch->branch_no }} - {{ $branch->city }}
+                        </option>
                     @endforeach
                 </select>
             </div>
@@ -87,4 +89,19 @@
     <button type="submit" class="btn btn-primary">Save</button>
     <a href="{{ route('properties.index') }}" class="btn btn-secondary">Cancel</a>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const branchSelect = document.querySelector('[name="branch_no"]');
+    const propertyNoPreview = document.getElementById('property_no_preview');
+    const nextPropertyNos = @json($branchPropertyNos);
+
+    const updatePropertyNo = () => {
+        propertyNoPreview.value = nextPropertyNos[branchSelect.value] || '';
+    };
+
+    branchSelect.addEventListener('change', updatePropertyNo);
+    updatePropertyNo();
+});
+</script>
 @endsection

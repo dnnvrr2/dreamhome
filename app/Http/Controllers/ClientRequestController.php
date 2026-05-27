@@ -186,6 +186,6 @@ class ClientRequestController extends Controller
 
     private function nextClientNo(): string
     {
-        return $this->nextPrefixedId('clients', 'client_no', 'C', 4);
+        return $this->nextPrefixedId('clients', 'client_no', 'CR', 3);
     }
 }

@@ -81,10 +81,11 @@ class PropertyApiController extends Controller
             'city'        => 'required',
             'rent'        => 'required|numeric',
             'rooms'       => 'required|integer',
+            'branch_no'   => 'required|exists:branches,branch_no',
             'staff_no'    => 'nullable|exists:staff,staff_no',
         ]);
 
-        $propertyNo = $this->nextPrefixedId('properties', 'property_no', 'P', 4);
+        $propertyNo = $this->nextPropertyNoForBranch($request->branch_no);
 
         DB::insert("
             INSERT INTO properties
@@ -152,5 +153,13 @@ class PropertyApiController extends Controller
     {
         DB::delete("DELETE FROM properties WHERE property_no = ?", [$property_no]);
         return response()->json(['success' => true, 'message' => 'Property deleted']);
+    }
+
+    private function nextPropertyNoForBranch(string $branchNo): string
+    {
+        $branch = DB::selectOne("SELECT city FROM branches WHERE branch_no = ?", [$branchNo]);
+        $cityInitial = strtoupper(substr((string) ($branch->city ?? ''), 0, 1)) ?: 'X';
+
+        return $this->nextPrefixedId('properties', 'property_no', 'P' . $cityInitial, 3);
     }
 }

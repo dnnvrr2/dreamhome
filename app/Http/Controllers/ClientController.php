@@ -54,7 +54,7 @@ class ClientController extends Controller
     {
         $branches = DB::select("SELECT * FROM branches ORDER BY branch_no");
         $staff    = DB::select("SELECT * FROM staff ORDER BY staff_no");
-        $clientNo = $this->nextPrefixedId('clients', 'client_no', 'C', 4);
+        $clientNo = $this->nextPrefixedId('clients', 'client_no', 'CR', 3);
         return view('clients.create', compact('branches', 'staff', 'clientNo'));
     }
 
@@ -65,7 +65,7 @@ class ClientController extends Controller
             'l_name'    => 'required|max:40',
         ]);
 
-        $clientNo = $this->nextPrefixedId('clients', 'client_no', 'C', 4);
+        $clientNo = $this->nextPrefixedId('clients', 'client_no', 'CR', 3);
 
         DB::insert("
             INSERT INTO clients

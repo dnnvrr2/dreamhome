@@ -21,9 +21,10 @@ abstract class Controller
     protected function nextPrefixedId(string $table, string $column, string $prefix, int $digits): string
     {
         $pattern = '^' . preg_quote($prefix, '/') . '[0-9]{' . $digits . '}$';
+        $numberStart = strlen($prefix) + 1;
 
         $row = DB::selectOne("
-            SELECT MAX(CAST(SUBSTRING({$column} FROM 2) AS INTEGER)) AS max_number
+            SELECT MAX(CAST(SUBSTRING({$column} FROM {$numberStart}) AS INTEGER)) AS max_number
             FROM {$table}
             WHERE {$column} ~ ?
         ", [$pattern]);

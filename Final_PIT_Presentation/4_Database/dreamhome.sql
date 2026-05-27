@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict XJJS6uQwPBeiYhyWNfLJLqNtkZJcgNK0iKVWX8X7Q5VcZ20fkxc0c6mjfsH7ZDT
+\restrict NfjHzF1jDxe6JSBAnE4YxZ6SlWTWOgDVEfQbc8Txefn9UwfPCnKT197X92R4Gbg
 
 -- Dumped from database version 18.3
 -- Dumped by pg_dump version 18.3
@@ -29,9 +29,9 @@ CREATE DATABASE dreamhome WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PRO
 
 ALTER DATABASE dreamhome OWNER TO postgres;
 
-\unrestrict XJJS6uQwPBeiYhyWNfLJLqNtkZJcgNK0iKVWX8X7Q5VcZ20fkxc0c6mjfsH7ZDT
+\unrestrict NfjHzF1jDxe6JSBAnE4YxZ6SlWTWOgDVEfQbc8Txefn9UwfPCnKT197X92R4Gbg
 \connect dreamhome
-\restrict XJJS6uQwPBeiYhyWNfLJLqNtkZJcgNK0iKVWX8X7Q5VcZ20fkxc0c6mjfsH7ZDT
+\restrict NfjHzF1jDxe6JSBAnE4YxZ6SlWTWOgDVEfQbc8Txefn9UwfPCnKT197X92R4Gbg
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1275,6 +1275,11 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.adverts (id, property_no, newspaper_id, advert_date, cost, comments, created_at, updated_at) FROM stdin;
+1	PG004	1	2025-03-10	120.00	Three-room flat advertised for spring renters.	2026-05-27 22:43:11	2026-05-27 22:43:11
+2	PG021	1	2025-06-15	150.00	House advert placed before summer viewing period.	2026-05-27 22:43:11	2026-05-27 22:43:11
+3	PL001	2	2025-07-05	220.00	London flat advert with parking note.	2026-05-27 22:43:11	2026-05-27 22:43:11
+4	PL002	2	2025-07-12	260.00	Family house advert.	2026-05-27 22:43:11	2026-05-27 22:43:11
+5	PB002	3	2025-08-20	110.00	Redland flat advert.	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1283,11 +1288,9 @@ COPY public.adverts (id, property_no, newspaper_id, advert_date, cost, comments,
 --
 
 COPY public.branches (branch_no, street, area, city, postcode, tel_no, fax_no, created_at, updated_at) FROM stdin;
-B001	163 Main Street	Patrick	Glasgow	G11 9QX	0141-339-2178	0141-339-2179	2026-05-07 01:02:35	2026-05-07 01:02:35
-B002	22 Deer Road	Yoker	Glasgow	G13 1GX	0141-339-3000	0141-339-3001	2026-05-07 01:02:35	2026-05-07 01:02:35
-B003	472 Scotland Street	Partick	Glasgow	G5 8NW	0141-339-4000	0141-339-4001	2026-05-07 01:02:35	2026-05-07 01:02:35
-B004	16 Argyll Street	London	London	WC2N 5DU	0171-884-5000	0171-884-5001	2026-05-07 01:02:35	2026-05-07 01:02:35
-B005	73 Queen Street	Bristol	Bristol	BS1 4LR	0117-929-1000	0117-929-1001	2026-05-07 01:02:35	2026-05-07 01:02:35
+B003	163 Main Street	Partick	Glasgow	G11 9QX	0141-339-2178	0141-339-4439	2026-05-27 22:43:11	2026-05-27 22:43:11
+B005	22 Deer Road	Cranford	London	SW1 4EH	020-7946-1188	020-7946-1189	2026-05-27 22:43:11	2026-05-27 22:43:11
+B007	8 Clifton Road	Clifton	Bristol	BS8 1AA	0117-496-3321	0117-496-3322	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1296,10 +1299,7 @@ B005	73 Queen Street	Bristol	Bristol	BS1 4LR	0117-929-1000	0117-929-1001	2026-05
 --
 
 COPY public.client_requests (id, property_no, f_name, l_name, email, tel_no, street, area, city, postcode, pref_type, max_rent, preferred_view_date, comments, status, approved_client_no, processed_by, processed_at, created_at, updated_at) FROM stdin;
-3	PL001	Denver	Amba	denver.amba@gmail.com	09123456789	\N	\N	\N	\N	\N	\N	2026-12-12	dsadasd	approved	C0001	2	2026-05-27 16:58:39	2026-05-27 16:57:54	2026-05-27 16:58:39
-4	PB001	Denver	amba	denver.amba@gmail.com	09123456785	\N	\N	\N	\N	\N	\N	2026-12-12	asdfasdfa	approved	C0002	2	2026-05-27 17:09:16	2026-05-27 17:07:18	2026-05-27 17:09:16
-1	PG005	dasd	sadas	a@gmail.com	656546498	dadsa	\N	dasda	\N	\N	2000.00	2026-12-12	hi	rejected	\N	2	2026-05-27 18:05:20	2026-05-27 00:50:23	2026-05-27 18:05:20
-2	PG001	sasa	sadas	djkasb@gmail.com	5458	\N	\N	\N	\N	\N	\N	2026-11-11	\N	rejected	\N	2	2026-05-27 18:05:34	2026-05-27 16:38:29	2026-05-27 18:05:34
+1	PB001	Sophie	Evans	sophie.evans@example.com	0117-555-4401	\N	\N	Bristol	\N	House	750.00	2026-06-15	Interested in Clifton house.	pending	\N	\N	\N	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1308,12 +1308,12 @@ COPY public.client_requests (id, property_no, f_name, l_name, email, tel_no, str
 --
 
 COPY public.clients (client_no, f_name, l_name, street, area, city, postcode, tel_no, pref_type, max_rent, comments, registered_by, branch_no, created_at, updated_at) FROM stdin;
-CR001	Mike	Ritchie	18 Tain Street	Gourock	Glasgow	PA16 1YQ	01475-392178	House	750.00	\N	SG37 	B001	2026-05-12 15:53:18	2026-05-12 15:53:18
-CR002	Sarah	Tan	22 Baker Avenue	Chelsea	London	SW3 1AA	0171-200-9001	Flat	900.00	\N	SL21 	B004	2026-05-12 15:53:18	2026-05-12 15:53:18
-CR003	James	Lim	5 Hillhead Street	Hillhead	Glasgow	G12 8PX	0141-300-1122	Flat	500.00	\N	SG37 	B002	2026-05-12 15:53:18	2026-05-12 15:53:18
-CR004	Laura	Cruz	14 Clifton Park	Clifton	Bristol	BS8 3HH	0117-300-2233	House	1200.00	\N	SG37 	B005	2026-05-12 15:53:18	2026-05-12 15:53:18
-C0001	Denver	Amba	\N	\N	\N	\N	09123456789	Flat	800.00	dsadasd\nEmail: denver.amba@gmail.com	\N	B004	2026-05-27 16:58:39	2026-05-27 16:58:39
-C0002	Denver	amba	\N	\N	\N	\N	09123456785	House	700.00	asdfasdfa\nEmail: denver.amba@gmail.com	\N	B005	2026-05-27 17:09:16	2026-05-27 17:09:16
+CR074	Mike	Ritchie	18 Tain Street	\N	Gourock	PA19 1YQ	01475-392178	House	750.00	Currently living at home with parents. Getting married in August.	SG37 	B003	2026-05-27 22:43:11	2026-05-27 22:43:11
+CR056	Aline	Stewart	22 Queen Street	Partick	Glasgow	G11 8AA	0141-555-2201	Flat	500.00	Needs property close to university.	SG014	B003	2026-05-27 22:43:11	2026-05-27 22:43:11
+CR062	John	Kay	9 Station Road	Hyndland	Glasgow	G12 8QQ	0141-555-2202	Flat	450.00	Prefers ground floor.	SG014	B003	2026-05-27 22:43:11	2026-05-27 22:43:11
+CR083	Louise	Brown	3 Fleet Street	\N	London	EC4Y 1AA	020-5555-2203	Flat	1000.00	Requires central location.	SL41 	B005	2026-05-27 22:43:11	2026-05-27 22:43:11
+CR091	Peter	Wilson	14 Park Road	Ealing	London	W5 2AA	020-5555-2204	House	1600.00	Family with two children.	SL21 	B005	2026-05-27 22:43:11	2026-05-27 22:43:11
+CR105	Janet	Mills	61 Redland Road	\N	Bristol	BS6 6QP	0117-555-2205	Flat	550.00	Looking for quiet area.	SB22 	B007	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1322,17 +1322,15 @@ C0002	Denver	amba	\N	\N	\N	\N	09123456785	House	700.00	asdfasdfa\nEmail: denver.
 --
 
 COPY public.inspections (inspection_id, property_no, staff_no, inspection_date, comments, created_at, updated_at) FROM stdin;
-1	PG001	SL41 	2024-04-12	No problems found. Property in good condition.	2026-05-12 15:51:49	2026-05-12 15:51:49
-2	PG001	SG37 	2024-09-30	Cracked ceiling in living room. Requires urgent repair.	2026-05-12 15:51:49	2026-05-12 15:51:49
-3	PG002	SL41 	2024-05-10	Minor scuff marks on walls. Otherwise clean.	2026-05-12 15:51:49	2026-05-12 15:51:49
-4	PG003	SG37 	2024-07-01	Crockery needs to be replaced.	2026-05-12 15:51:49	2026-05-12 15:51:49
-5	PG004	SL52 	2024-06-15	Garden overgrown. Tenant reminded of maintenance duties.	2026-05-12 15:51:49	2026-05-12 15:51:49
-6	PL001	SL21 	2024-07-20	Property well maintained. No issues.	2026-05-12 15:51:49	2026-05-12 15:51:49
-7	PL002	SL21 	2024-08-05	Boiler making noise. Maintenance team notified.	2026-05-12 15:51:49	2026-05-12 15:51:49
-8	PB001	SG37 	2024-09-10	Damp patch found in bathroom ceiling. Needs inspection by plumber.	2026-05-12 15:51:49	2026-05-12 15:51:49
-9	PG001	SL41 	2025-01-15	Ceiling repair completed. Property back in good condition.	2026-05-12 15:51:49	2026-05-12 15:51:49
-11	PG001	SL41 	2025-05-11	Annual inspection completed.	2026-05-20 15:45:15	2026-05-20 15:45:15
-12	PG001	SL41 	2025-05-11	Annual inspection completed.	2026-05-20 15:46:21	2026-05-20 15:46:21
+1	PG004	SG022	2025-04-12	No problems found. Property in good condition.	2026-05-27 22:43:11	2026-05-27 22:43:11
+2	PG004	SG022	2025-09-30	Cracked ceiling in living room. Requires urgent repair.	2026-05-27 22:43:11	2026-05-27 22:43:11
+3	PG004	SG022	2026-01-15	Ceiling repair completed. Property back in good condition.	2026-05-27 22:43:11	2026-05-27 22:43:11
+4	PG021	SG044	2025-07-01	Crockery needs to be replaced.	2026-05-27 22:43:11	2026-05-27 22:43:11
+5	PG016	SG055	2025-06-15	Garden overgrown. Tenant reminded of maintenance duties.	2026-05-27 22:43:11	2026-05-27 22:43:11
+6	PL001	SL063	2025-07-20	Property well maintained. No issues.	2026-05-27 22:43:11	2026-05-27 22:43:11
+7	PL002	SL074	2025-08-05	Boiler making noise. Maintenance team notified.	2026-05-27 22:43:11	2026-05-27 22:43:11
+8	PB002	SB055	2025-09-10	Damp patch found in bathroom ceiling. Needs inspection by plumber.	2026-05-27 22:43:11	2026-05-27 22:43:11
+9	PB001	SB044	2026-02-11	Fence repaired and property clean.	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1341,9 +1339,10 @@ COPY public.inspections (inspection_id, property_no, staff_no, inspection_date, 
 --
 
 COPY public.leases (lease_no, monthly_rent, payment_method, deposit, deposit_paid, date_start, date_end, duration_month, client_no, property_no, staff_no, created_at, updated_at) FROM stdin;
-LS003	450.00	Direct Debit	900.00	f	2024-05-15	2025-05-15	12	CR003	PG004	SL41 	2026-05-12 15:53:30	2026-05-12 15:53:30
-LS099	400.00	Direct Debit	800.00	t	2025-06-01	2026-06-01	12	CR001	PG003	SL21 	2026-05-20 15:50:32	2026-05-20 15:50:32
-L0007	200.00	Cash	200.00	t	2026-05-27	2026-12-12	7	C0001	PB001	SL21 	2026-05-27 17:16:38	2026-05-27 17:16:38
+L0001	600.00	Direct Debit	600.00	t	2025-09-01	2026-08-31	12	CR074	PG021	SG37 	2026-05-27 22:43:11	2026-05-27 22:43:11
+L0002	800.00	Standing Order	800.00	t	2025-12-01	2026-05-31	6	CR083	PL001	SL21 	2026-05-27 22:43:11	2026-05-27 22:43:11
+L0003	480.00	Direct Debit	480.00	t	2025-10-01	2026-03-31	6	CR105	PB002	SB11 	2026-05-27 22:43:11	2026-05-27 22:43:11
+L0004	375.00	Cash	375.00	f	2024-07-01	2025-06-30	12	CR062	PG036	SG37 	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1352,8 +1351,9 @@ L0007	200.00	Cash	200.00	t	2026-05-27	2026-12-12	7	C0001	PB001	SL21 	2026-05-27 
 --
 
 COPY public.managers (staff_no, date_start, car_allowance, bonus, created_at, updated_at) FROM stdin;
-SL21 	2000-06-01	1200.00	500.00	2026-05-07 01:03:18	2026-05-07 01:03:18
-SG37 	2005-09-01	1000.00	400.00	2026-05-07 01:03:18	2026-05-07 01:03:18
+SG37 	1990-04-01	1800.00	300.00	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL21 	1989-09-19	2000.00	340.00	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB11 	1993-01-01	1750.00	280.00	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1391,6 +1391,9 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 --
 
 COPY public.newspapers (id, name, street, city, postcode, tel_no, contact_name, created_at, updated_at) FROM stdin;
+1	Glasgow Daily News	45 Argyle Street	Glasgow	G2 8AA	0141-555-3301	Fiona Kerr	2026-05-27 22:43:11	2026-05-27 22:43:11
+2	London Evening Standard	10 Fleet Street	London	EC4Y 1AA	020-5555-3302	Martin Cole	2026-05-27 22:43:11	2026-05-27 22:43:11
+3	Bristol Post	2 Temple Way	Bristol	BS1 6AA	0117-555-3303	Alice Morgan	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1399,6 +1402,27 @@ COPY public.newspapers (id, name, street, city, postcode, tel_no, contact_name, 
 --
 
 COPY public.next_of_kins (staff_no, full_name, relationship, street, city, tel_no, created_at, updated_at) FROM stdin;
+SG37 	Ann Beech Kin	Family	12 Wood Street	Glasgow	0141-555-0101	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG014	David Ford Kin	Family	4 Hill Road	Glasgow	0141-555-0102	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG005	Susan Brand Kin	Family	15 Queen Street	Glasgow	0141-555-0103	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG022	Robert Bell Kin	Family	20 Kelvin Road	Glasgow	0141-555-0104	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG033	Karen MacLeod Kin	Family	6 Clyde Avenue	Glasgow	0141-555-0105	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG044	Peter Ross Kin	Family	43 High Street	Glasgow	0141-555-0106	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG055	Mairi Campbell Kin	Family	9 River Walk	Glasgow	0141-555-0107	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL21 	John White Kin	Family	19 Taylor Street	London	0171-884-5112	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL41 	Julie Lee Kin	Family	11 Baker Street	London	020-5555-0201	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL52 	Carol Dean Kin	Family	87 King Road	London	020-5555-0202	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL063	Michael Grant Kin	Family	23 Oakfield Avenue	London	020-5555-0203	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL074	Rachel Stone Kin	Family	5 Park Lane	London	020-5555-0204	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL085	Andrew King Kin	Family	70 Victoria Road	London	020-5555-0205	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL096	Helen Clark Kin	Family	18 Grove Road	London	020-5555-0206	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB11 	George Russell Kin	Family	17 Bridge Street	Bristol	0117-555-0301	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB22 	Elaine Moore Kin	Family	42 Redland Road	Bristol	0117-555-0302	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB33 	Nina Patel Kin	Family	3 College Green	Bristol	0117-555-0303	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB044	Thomas Hill Kin	Family	6 Park Row	Bristol	0117-555-0304	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB055	Olivia Green Kin	Family	14 Queen Square	Bristol	0117-555-0305	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB066	Daniel Price Kin	Family	21 Harbour Road	Bristol	0117-555-0306	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB077	Emma Watson Kin	Family	10 Clifton Down	Bristol	0117-555-0307	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1407,11 +1431,12 @@ COPY public.next_of_kins (staff_no, full_name, relationship, street, city, tel_n
 --
 
 COPY public.owners (owner_no, f_name, l_name, street, city, postcode, tel_no, created_at, updated_at) FROM stdin;
-O0001	John	Smith	12 Park Lane	Glasgow	G1 2AA	0141-200-1111	2026-05-07 01:02:41	2026-05-07 01:02:41
-O0002	Carol	Farrell	6 Dumbarton Road	Glasgow	G11 6PE	0141-200-2222	2026-05-07 01:02:41	2026-05-07 01:02:41
-O0003	Tina	Murphy	8 Novar Drive	Glasgow	G12 9SY	0141-200-3333	2026-05-07 01:02:41	2026-05-07 01:02:41
-O0004	James	Watson	34 Kings Road	London	WC1N 3AX	0171-200-4444	2026-05-07 01:02:41	2026-05-07 01:02:41
-O0005	Susan	Lee	19 Avon Road	Bristol	BS3 2NX	0117-200-5555	2026-05-07 01:02:41	2026-05-07 01:02:41
+O0001	Tony	Shaw	1 West George Street	Glasgow	G2 1AA	0141-555-1101	2026-05-27 22:43:11	2026-05-27 22:43:11
+O0002	Mary	Trevor	7 Rose Street	Glasgow	G3 6AB	0141-555-1102	2026-05-27 22:43:11	2026-05-27 22:43:11
+O0003	Helen	Parker	44 Baker Street	London	NW1 6XE	020-5555-1103	2026-05-27 22:43:11	2026-05-27 22:43:11
+O0004	James	Milton	9 Queen Street	London	W1 4AA	020-5555-1104	2026-05-27 22:43:11	2026-05-27 22:43:11
+O0005	Sarah	Jones	31 Clifton Road	Bristol	BS8 1AA	0117-555-1105	2026-05-27 22:43:11	2026-05-27 22:43:11
+O0006	William	Davies	66 Redland Grove	Bristol	BS6 6AB	0117-555-1106	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1428,18 +1453,6 @@ COPY public.password_reset_tokens (email, token, created_at) FROM stdin;
 --
 
 COPY public.personal_access_tokens (id, tokenable_type, tokenable_id, name, token, abilities, last_used_at, expires_at, created_at, updated_at) FROM stdin;
-1	App\\Models\\User	1	dreamhome-mobile	7a166295249f5e751323270b7eacfd5bdb8f53dd4eece94b8de6122d1b99266d	["*"]	\N	\N	2026-05-11 06:58:39	2026-05-11 06:58:39
-44	App\\Models\\User	1	dreamhome-mobile	c42f9b34d1c3eb324024ef423669adca803731cc1a959fe182e41e98e41e7bc6	["*"]	2026-05-25 15:14:06	\N	2026-05-25 15:10:34	2026-05-25 15:14:06
-45	App\\Models\\User	1	dreamhome-mobile	a83824a63d9181753fbdd94473775a696f4ef20d1531911d4d7b02bbaa7f855c	["*"]	\N	\N	2026-05-25 15:27:04	2026-05-25 15:27:04
-3	App\\Models\\User	1	dreamhome-mobile	9678c472eb74230f64e1a018af541568a555e2f8f937cb1829584badac2bb2c5	["*"]	2026-05-11 11:42:46	\N	2026-05-11 11:42:43	2026-05-11 11:42:46
-4	App\\Models\\User	1	dreamhome-mobile	a88e111bc087e67139d9cd662d495a56023d7620103a343c136185aa8b04f169	["*"]	2026-05-11 11:43:18	\N	2026-05-11 11:43:11	2026-05-11 11:43:18
-5	App\\Models\\User	1	dreamhome-mobile	fe6f436add980008710382f6a7c88cebb843de2b0e23c7c0921a0559c21a5972	["*"]	2026-05-24 19:09:42	\N	2026-05-24 19:09:31	2026-05-24 19:09:42
-6	App\\Models\\User	3	dreamhome-mobile	42207f3e038ca8727c2c5b4f2bf30563311e1263d6130ad400acec6104b38d43	["*"]	2026-05-24 19:13:42	\N	2026-05-24 19:10:08	2026-05-24 19:13:42
-7	App\\Models\\User	1	dreamhome-mobile	2f7421a75731b17278ebd5bd44095a2e007c7307a06c7cdd41e70f67dcd0bf1f	["*"]	2026-05-25 10:36:04	\N	2026-05-25 10:35:56	2026-05-25 10:36:04
-8	App\\Models\\User	1	dreamhome-mobile	912bf09ff106ad6a1b7abe5354684cbb472f5206ea6c482c72c5d247cc89c6a4	["*"]	2026-05-25 12:54:13	\N	2026-05-25 12:53:30	2026-05-25 12:54:13
-41	App\\Models\\User	1	dreamhome-mobile	ef20dd75e988e518435e40ea071143ef22643414f3f2961f3b190ba1a739e75f	["*"]	2026-05-25 12:59:25	\N	2026-05-25 12:57:46	2026-05-25 12:59:25
-42	App\\Models\\User	1	dreamhome-mobile	2370e2571bce9e0e462640d265033c7fffe44349ee1fbfb43bb6bf9534c185d1	["*"]	2026-05-25 13:36:56	\N	2026-05-25 13:02:49	2026-05-25 13:36:56
-43	App\\Models\\User	1	dreamhome-mobile	3a58ad5242e266b41d0c08907929ac45f5a32b4e57a32bc9625adc5381108be8	["*"]	2026-05-25 13:37:22	\N	2026-05-25 13:37:20	2026-05-25 13:37:22
 \.
 
 
@@ -1448,17 +1461,16 @@ COPY public.personal_access_tokens (id, tokenable_type, tokenable_id, name, toke
 --
 
 COPY public.properties (property_no, street, area, city, postcode, type, rooms, rent, is_available, owner_no, branch_no, created_at, updated_at, staff_no) FROM stdin;
-PG005	3 Hillside Crescent	Patrick	Glasgow	G11 7RX	Studio	1	250.00	t	O0002	B003	2026-05-07 01:02:49	2026-05-07 01:02:49	\N
-PL001	47 Oakfield Avenue	Byres Road	London	WC2N 1AB	Flat	2	800.00	t	O0004	B004	2026-05-07 01:02:49	2026-05-07 01:02:49	\N
-PL002	12 Kensington Road	Chelsea	London	SW3 4TY	House	6	1500.00	t	O0004	B004	2026-05-07 01:02:49	2026-05-07 01:02:49	\N
-PL003	9 Baker Street	Marylebone	London	W1U 3BW	Flat	3	950.00	f	O0005	B004	2026-05-07 01:02:49	2026-05-07 01:02:49	\N
-PB001	22 Clifton Road	Clifton	Bristol	BS8 1AF	House	4	700.00	t	O0005	B005	2026-05-07 01:02:49	2026-05-07 01:02:49	\N
-PB002	5 Redland Grove	Redland	Bristol	BS6 6PT	Flat	2	480.00	f	O0003	B005	2026-05-07 01:02:49	2026-05-07 01:02:49	\N
-PG004	5 Novar Drive	Hyndland	Glasgow	G12 9AX	Flat	4	450.00	t	O0003	B002	2026-05-07 01:02:49	2026-05-07 01:02:49	SG37 
-PG099	99 Test Street	\N	Glasgow	\N	Flat	2	350.00	f	O0001	B001	2026-05-20 15:46:12	2026-05-20 15:46:19	SL21 
-PG001	6 Lawrence Street	Patrick	Glasgow	G11 9QX	Flat	3	350.00	t	O0001	B002	2026-05-07 01:02:49	2026-05-20 15:46:23	SG37 
-PG002	2 Manor Road	Hyndland	Glasgow	G32 4QX	Flat	3	375.00	f	O0002	B001	2026-05-07 01:02:49	2026-05-07 01:02:49	SL21 
-PG003	18 Dale Road	Hyndland	Glasgow	G12 0LR	House	5	600.00	f	O0001	B002	2026-05-07 01:02:49	2026-05-20 15:50:32	SG37 
+PG004	6 Lawrence Street	Partick	Glasgow	G11 9QX	Flat	3	350.00	t	O0001	B003	2026-05-27 22:43:11	2026-05-27 22:43:11	SG022
+PG036	2 Manor Road	\N	Glasgow	G32 4QX	Flat	3	375.00	t	O0002	B003	2026-05-27 22:43:11	2026-05-27 22:43:11	SG033
+PG021	18 Dale Road	Hyndland	Glasgow	G12	House	5	600.00	t	O0001	B003	2026-05-27 22:43:11	2026-05-27 22:43:11	SG044
+PG016	5 Novar Drive	Hyndland	Glasgow	G12 9AX	Flat	4	450.00	t	O0002	B003	2026-05-27 22:43:11	2026-05-27 22:43:11	SG055
+PL001	47 Oakfield Avenue	Ealing	London	W5 1AA	Flat	4	800.00	t	O0003	B005	2026-05-27 22:43:11	2026-05-27 22:43:11	SL063
+PL002	12 Kensington Road	Kensington	London	W8 7AA	House	6	1500.00	t	O0004	B005	2026-05-27 22:43:11	2026-05-27 22:43:11	SL074
+PL003	9 Baker Street	Marylebone	London	NW1 6XE	Flat	2	950.00	f	O0003	B005	2022-05-27 22:43:11	2022-05-27 22:43:11	SL085
+PB001	22 Clifton Road	Clifton	Bristol	BS8 1AA	House	5	700.00	t	O0005	B007	2026-05-27 22:43:11	2026-05-27 22:43:11	SB044
+PB002	5 Redland Grove	Redland	Bristol	BS6 6QP	Flat	3	480.00	t	O0006	B007	2026-05-27 22:43:11	2026-05-27 22:43:11	SB055
+PB003	14 Harbour View	Harbourside	Bristol	BS1 6SX	Studio	1	325.00	t	O0006	B007	2026-05-27 22:43:11	2026-05-27 22:43:11	SB066
 \.
 
 
@@ -1467,8 +1479,6 @@ PG003	18 Dale Road	Hyndland	Glasgow	G12 0LR	House	5	600.00	f	O0001	B002	2026-05-
 --
 
 COPY public.property_audit_log (log_id, property_no, old_status, new_status, changed_at, changed_by) FROM stdin;
-1	PG002	t	f	2026-05-20 15:47:18.662859	postgres
-2	PG003	t	f	2026-05-20 15:50:32.151288	postgres
 \.
 
 
@@ -1477,7 +1487,9 @@ COPY public.property_audit_log (log_id, property_no, old_status, new_status, cha
 --
 
 COPY public.secretaries (staff_no, typing_speed, created_at, updated_at) FROM stdin;
-SL52 	75	2026-05-07 01:03:18	2026-05-07 01:03:18
+SG005	62	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL52 	72	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB33 	68	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1486,7 +1498,7 @@ SL52 	75	2026-05-07 01:03:18	2026-05-07 01:03:18
 --
 
 COPY public.sessions (id, user_id, ip_address, user_agent, payload, last_activity) FROM stdin;
-dxlm5goJJuHQnsLALspMtd6lvDVrsoT4jM0kGCmx	2	127.0.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36	eyJfdG9rZW4iOiJEOU56TzNPRWZsUTI2c3FqMEZQWHhYZ2tNaEdLbm1ZcWwyVDJrWGZ4IiwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvZHJlYW1ob21lLnRlc3QifSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2RyZWFtaG9tZS50ZXN0XC9wcm9wZXJ0aWVzIiwicm91dGUiOiJwcm9wZXJ0aWVzLmluZGV4In0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjJ9	1779886941
+hZAkqlUXZxiOW07gTt5EuLBCVb664BNDSKCwGQvv	2	127.0.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36	eyJfdG9rZW4iOiJVT1FSRmd2cWtrUXJRSzl0aER1ZUZ2MHJkZnhzY0pjTUxRT2k3b3FvIiwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvZHJlYW1ob21lLnRlc3RcL3Byb3BlcnRpZXMifSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2RyZWFtaG9tZS50ZXN0XC9kYXNoYm9hcmQiLCJyb3V0ZSI6ImRhc2hib2FyZCJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjoyfQ==	1779893409
 \.
 
 
@@ -1495,10 +1507,27 @@ dxlm5goJJuHQnsLALspMtd6lvDVrsoT4jM0kGCmx	2	127.0.0.1	Mozilla/5.0 (Windows NT 10.
 --
 
 COPY public.staff (staff_no, f_name, l_name, street, area, city, postcode, tel_no, sex, dob, nin, "position", salary, date_joined, branch_no, supervisor_no, created_at, updated_at) FROM stdin;
-SL41 	Julie	Lee	28 Drum Road	Springburn	Glasgow	G21 3QH	0141-848-4435	F	1980-06-13	WL382713C	Supervisor	24000.00	2010-03-15	B001	\N	2026-05-07 01:03:12	2026-05-07 01:03:12
-SL52 	Carol	Dean	5 Striven Gardens	Hyndland	Glasgow	G12 0HZ	0141-354-1078	F	1992-04-09	WM532187D	Secretary	18000.00	2018-07-01	B001	SL41 	2026-05-07 01:03:12	2026-05-07 01:03:12
-SL21 	John	White	19 Taylor Street	Partick	Glasgow	G11 9QX	0141-848-3345	M	1945-10-01	WK442011B	Manager	35000.00	2000-06-01	B001	\N	2026-05-07 01:03:12	2026-05-20 15:50:32
-SG37 	Ann	Beech	81 George Street	Perth	Glasgow	G1 2NX	0141-225-7025	F	1978-11-10	WL224987B	Manager	32000.00	2005-09-01	B002	\N	2026-05-07 01:03:12	2026-05-20 15:50:32
+SG37 	Ann	Beech	12 Wood Street	Kelvinside	Glasgow	G12 8QQ	0141-555-0101	F	1960-11-10	WL220658D	Manager	32000.00	1989-03-01	B003	\N	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG014	David	Ford	4 Hill Road	Partick	Glasgow	G11 7AB	0141-555-0102	M	1974-04-15	DF442011B	Supervisor	26000.00	1995-06-12	B003	\N	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG005	Susan	Brand	15 Queen Street	Partick	Glasgow	G11 5AD	0141-555-0103	F	1980-08-20	SB775533A	Secretary	19000.00	2001-09-03	B003	SG014	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG022	Robert	Bell	20 Kelvin Road	Hyndland	Glasgow	G12 9AA	0141-555-0104	M	1985-02-11	RB390112C	Staff	21000.00	2008-01-21	B003	SG014	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG033	Karen	MacLeod	6 Clyde Avenue	Patrick	Glasgow	G11 8AL	0141-555-0105	F	1987-07-23	KM778899D	Staff	21500.00	2010-05-10	B003	SG014	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG044	Peter	Ross	43 High Street	Dennistoun	Glasgow	G31 2TT	0141-555-0106	M	1990-09-12	PR220011E	Staff	20500.00	2016-03-14	B003	SG014	2026-05-27 22:43:11	2026-05-27 22:43:11
+SG055	Mairi	Campbell	9 River Walk	Partick	Glasgow	G11 6ZZ	0141-555-0107	F	1992-12-05	MC998877F	Staff	20800.00	2018-07-02	B003	SG014	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL21 	John	White	19 Taylor Street	Cranford	London	SW1 4EH	0171-884-5112	M	1945-10-01	WK442011B	Manager	30000.00	1988-10-24	B005	\N	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL41 	Julie	Lee	11 Baker Street	Marylebone	London	NW1 6XE	020-5555-0201	F	1973-06-17	JL338899C	Supervisor	27000.00	1996-11-18	B005	\N	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL52 	Carol	Dean	87 King Road	Chelsea	London	SW3 5XP	020-5555-0202	F	1984-05-05	CD445566D	Secretary	19500.00	2004-02-09	B005	SL41 	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL063	Michael	Grant	23 Oakfield Avenue	Ealing	London	W5 1AA	020-5555-0203	M	1986-01-19	MG112233E	Staff	22000.00	2011-08-22	B005	SL41 	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL074	Rachel	Stone	5 Park Lane	Kensington	London	W8 7AA	020-5555-0204	F	1988-03-30	RS221144F	Staff	21800.00	2013-10-07	B005	SL41 	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL085	Andrew	King	70 Victoria Road	Hammersmith	London	W6 9BB	020-5555-0205	M	1991-06-09	AK667788G	Staff	21400.00	2017-04-17	B005	SL41 	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL096	Helen	Clark	18 Grove Road	Fulham	London	SW6 3DD	020-5555-0206	F	1993-09-18	HC112277H	Staff	21200.00	2019-06-24	B005	SL41 	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB11 	George	Russell	17 Bridge Street	Clifton	Bristol	BS8 2PQ	0117-555-0301	M	1968-12-02	GR991122A	Manager	30500.00	1992-04-13	B007	\N	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB22 	Elaine	Moore	42 Redland Road	Redland	Bristol	BS6 6QP	0117-555-0302	F	1978-10-12	EM443322B	Supervisor	25500.00	2000-09-11	B007	\N	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB33 	Nina	Patel	3 College Green	Clifton	Bristol	BS1 5TR	0117-555-0303	F	1986-07-27	NP667700C	Secretary	18800.00	2006-01-16	B007	SB22 	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB044	Thomas	Hill	6 Park Row	Clifton	Bristol	BS1 5LJ	0117-555-0304	M	1989-02-14	TH118899D	Staff	20700.00	2014-03-19	B007	SB22 	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB055	Olivia	Green	14 Queen Square	Central	Bristol	BS1 4NT	0117-555-0305	F	1990-05-24	OG224466E	Staff	20900.00	2015-05-05	B007	SB22 	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB066	Daniel	Price	21 Harbour Road	Harbourside	Bristol	BS1 6SX	0117-555-0306	M	1992-11-03	DP779911F	Staff	20600.00	2018-02-12	B007	SB22 	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB077	Emma	Watson	10 Clifton Down	Clifton	Bristol	BS8 3HT	0117-555-0307	F	1994-04-28	EW335577G	Staff	20400.00	2020-10-01	B007	SB22 	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1507,7 +1536,9 @@ SG37 	Ann	Beech	81 George Street	Perth	Glasgow	G1 2NX	0141-225-7025	F	1978-11-10
 --
 
 COPY public.supervisors (staff_no, created_at, updated_at) FROM stdin;
-SL41 	2026-05-07 01:03:18	2026-05-07 01:03:18
+SG014	2026-05-27 22:43:11	2026-05-27 22:43:11
+SL41 	2026-05-27 22:43:11	2026-05-27 22:43:11
+SB22 	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1516,10 +1547,10 @@ SL41 	2026-05-07 01:03:18	2026-05-07 01:03:18
 --
 
 COPY public.users (id, name, email, email_verified_at, password, remember_token, created_at, updated_at, role) FROM stdin;
-1	Admin	admin@dreamhome.com	\N	$2y$12$Ce4POYLNN7YHa8.lliOvrurSlOmvNcwDA87zbATklcWJmoAghGp4u	\N	2026-05-11 06:17:59	2026-05-11 06:17:59	admin
-2	Manager User	manager@dreamhome.com	\N	$2y$12$dY60t3dIP674AxyM.85CcONlk/dRQWGmxYmsI7NOBPqUevcHJZkLq	\N	2026-05-25 00:17:13	2026-05-25 00:17:13	manager
-3	Supervisor User	supervisor@dreamhome.com	\N	$2y$12$dY60t3dIP674AxyM.85CcONlk/dRQWGmxYmsI7NOBPqUevcHJZkLq	\N	2026-05-25 00:17:13	2026-05-25 00:17:13	supervisor
-4	Staff User	staff@dreamhome.com	\N	$2y$12$dY60t3dIP674AxyM.85CcONlk/dRQWGmxYmsI7NOBPqUevcHJZkLq	\N	2026-05-25 00:17:13	2026-05-25 00:17:13	staff
+1	Admin User	admin@dreamhome.com	\N	$2y$10$6ndauI7QQG/Aj6yqLLKzlu.uTR9nUYSM2BVWFWxD2MKju/wG/WmmG	\N	2026-05-27 22:43:11	2026-05-27 22:43:11	admin
+3	Supervisor User	supervisor@dreamhome.com	\N	$2y$10$6ndauI7QQG/Aj6yqLLKzlu.uTR9nUYSM2BVWFWxD2MKju/wG/WmmG	\N	2026-05-27 22:43:11	2026-05-27 22:43:11	supervisor
+4	Staff User	staff@dreamhome.com	\N	$2y$10$6ndauI7QQG/Aj6yqLLKzlu.uTR9nUYSM2BVWFWxD2MKju/wG/WmmG	\N	2026-05-27 22:43:11	2026-05-27 22:43:11	staff
+2	Manager User	manager@dreamhome.com	\N	$2y$12$k.qZ38xU.wc4VhebdtdiZOD2PB8aJvW46vvXX3lF1hX1RO1cxlgT.	\N	2026-05-27 22:43:11	2026-05-27 14:45:02	manager
 \.
 
 
@@ -1528,16 +1559,12 @@ COPY public.users (id, name, email, email_verified_at, password, remember_token,
 --
 
 COPY public.viewings (client_no, property_no, view_date, staff_no, comments, created_at, updated_at) FROM stdin;
-CR001	PG001	2024-03-24	SG37 	Client liked the location, wants to see again.	2026-05-12 15:53:24	2026-05-12 15:53:24
-CR001	PG003	2024-03-26	SL41 	Too big for their needs.	2026-05-12 15:53:24	2026-05-12 15:53:24
-CR002	PL001	2024-04-02	SL21 	Very interested, asked about lease terms.	2026-05-12 15:53:24	2026-05-12 15:53:24
-CR002	PL002	2024-04-05	SL21 	Loves the area but rent is too high.	2026-05-12 15:53:24	2026-05-12 15:53:24
-CR003	PG002	2024-04-11	SG37 	Needs more time to decide.	2026-05-12 15:53:24	2026-05-12 15:53:24
-CR003	PG004	2024-04-13	SL41 	Preferred this one over PG002.	2026-05-12 15:53:24	2026-05-12 15:53:24
-CR004	PB001	2024-04-20	SG37 	Suitable for family. Interested in leasing.	2026-05-12 15:53:24	2026-05-12 15:53:24
-CR004	PL002	2024-04-22	SL21 	Too far from workplace.	2026-05-12 15:53:24	2026-05-12 15:53:24
-C0001	PL001	2026-12-12	\N	Requested from public property page.	2026-05-27 16:58:39	2026-05-27 16:58:39
-C0002	PB001	2026-12-12	\N	Requested from public property page.	2026-05-27 17:09:16	2026-05-27 17:09:16
+CR074	PG021	2025-07-01	SG044	Crockery needs to be replaced.	2026-05-27 22:43:11	2026-05-27 22:43:11
+CR056	PG004	2025-04-12	SG022	No problems found. Property in good condition.	2026-05-27 22:43:11	2026-05-27 22:43:11
+CR062	PG036	2025-05-10	SG033	Minor scuff marks on walls. Otherwise clean.	2026-05-27 22:43:11	2026-05-27 22:43:11
+CR083	PL001	2025-08-05	SL063	Client liked location and asked about parking.	2026-05-27 22:43:11	2026-05-27 22:43:11
+CR091	PL002	2025-08-18	SL074	Suitable for family, requested lease terms.	2026-05-27 22:43:11	2026-05-27 22:43:11
+CR105	PB002	2025-09-10	SB055	Damp patch found in bathroom ceiling.	2026-05-27 22:43:11	2026-05-27 22:43:11
 \.
 
 
@@ -1545,21 +1572,21 @@ C0002	PB001	2026-12-12	\N	Requested from public property page.	2026-05-27 17:09:
 -- Name: adverts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.adverts_id_seq', 1, false);
+SELECT pg_catalog.setval('public.adverts_id_seq', 5, true);
 
 
 --
 -- Name: client_requests_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.client_requests_id_seq', 4, true);
+SELECT pg_catalog.setval('public.client_requests_id_seq', 1, true);
 
 
 --
 -- Name: inspections_inspection_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.inspections_inspection_id_seq', 13, true);
+SELECT pg_catalog.setval('public.inspections_inspection_id_seq', 9, true);
 
 
 --
@@ -1573,21 +1600,21 @@ SELECT pg_catalog.setval('public.migrations_id_seq', 21, true);
 -- Name: newspapers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.newspapers_id_seq', 1, false);
+SELECT pg_catalog.setval('public.newspapers_id_seq', 3, true);
 
 
 --
 -- Name: personal_access_tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.personal_access_tokens_id_seq', 45, true);
+SELECT pg_catalog.setval('public.personal_access_tokens_id_seq', 1, false);
 
 
 --
 -- Name: property_audit_log_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.property_audit_log_log_id_seq', 4, true);
+SELECT pg_catalog.setval('public.property_audit_log_log_id_seq', 1, false);
 
 
 --
@@ -2179,5 +2206,5 @@ ALTER TABLE ONLY public.viewings
 -- PostgreSQL database dump complete
 --
 
-\unrestrict XJJS6uQwPBeiYhyWNfLJLqNtkZJcgNK0iKVWX8X7Q5VcZ20fkxc0c6mjfsH7ZDT
+\unrestrict NfjHzF1jDxe6JSBAnE4YxZ6SlWTWOgDVEfQbc8Txefn9UwfPCnKT197X92R4Gbg
 
